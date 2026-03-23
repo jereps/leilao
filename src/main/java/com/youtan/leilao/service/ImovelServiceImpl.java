@@ -35,7 +35,7 @@ public class ImovelServiceImpl implements ImovelService {
 
     @Override
     @Transactional
-    public ImovelDTO criateImovel(ImovelDTO imovelDTO) {
+    public ImovelDTO createImóvel(ImovelDTO imovelDTO) {
         Imovel imovel = mapper.map(imovelDTO,Imovel.class);
         repositoryImovel.save(imovel);
 

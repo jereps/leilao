@@ -2,7 +2,6 @@ package com.youtan.leilao.controller;
 
 import com.youtan.leilao.DTO.ImovelDTO;
 import com.youtan.leilao.service.ImovelService;
-import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,8 +29,8 @@ public class ImovelController {
     }
 
     @PostMapping
-    public ResponseEntity<ImovelDTO> criateImovel(@RequestBody ImovelDTO imovelDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(imovelService.criateImovel(imovelDTO));
+    public ResponseEntity<ImovelDTO> createImovel(@RequestBody ImovelDTO imovelDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(imovelService.createImóvel(imovelDTO));
     }
 
     @PutMapping
