@@ -14,8 +14,8 @@ public class ImovelController {
 
     private final ImovelService imovelService;
 
-    public ImovelController(ImovelService leilaoService) {
-        this.imovelService = leilaoService;
+    public ImovelController(ImovelService ImovelService) {
+        this.imovelService = ImovelService;
     }
 
     @GetMapping
@@ -30,7 +30,7 @@ public class ImovelController {
 
     @PostMapping
     public ResponseEntity<ImovelDTO> createImovel(@RequestBody ImovelDTO imovelDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(imovelService.createImóvel(imovelDTO));
+        return ResponseEntity.status(HttpStatus.CREATED).body(imovelService.createImovel(imovelDTO));
     }
 
     @PutMapping
