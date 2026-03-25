@@ -9,9 +9,9 @@ public interface ImovelService {
 
     ImovelDTO getImovel(Long id);
 
-    ImovelDTO createImóvel(ImovelDTO imovelDTO);
+    ImovelDTO createImovel(ImovelDTO imovelDTO);
 
-    ImovelDTO updateImovel(ImovelDTO imovelDTO);
+    ImovelDTO updateImovel(Long id, ImovelDTO imovelDTO);
 
     void deleteImovel(Long id);
 }
