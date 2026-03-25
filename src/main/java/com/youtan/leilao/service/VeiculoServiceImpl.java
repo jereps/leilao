@@ -43,14 +43,17 @@ public class VeiculoServiceImpl implements VeiculoService{
 
     @Override
     @Transactional
-    public VeiculoDTO updateVeiculo(VeiculoDTO veiculoDTO) {
+    public VeiculoDTO updateVeiculo(Long id, VeiculoDTO veiculoDTO) {
+        veiculoRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException(" Veiculo não encontrado."));
         Veiculo veiculo = mapper.map(veiculoDTO,Veiculo.class);
-        veiculoRepository.save(veiculo);
         return mapper.map(veiculo,VeiculoDTO.class);
     }
 
     @Override
     public void deleteVeiculo(Long id) {
+        veiculoRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException(" Veiculo não encontrado."));
         veiculoRepository.deleteById(id);
     }
 }

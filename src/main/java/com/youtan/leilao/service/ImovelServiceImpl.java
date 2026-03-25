@@ -31,7 +31,7 @@ public class ImovelServiceImpl implements ImovelService {
     public ImovelDTO getImovel(Long id) {
         return repositoryImovel.findById(id)
                 .map(imovel -> mapper.map(imovel,ImovelDTO.class))
-                .orElseThrow(() -> new NoSuchElementException(" Imovel não encontrado"));
+                .orElseThrow(() -> new NoSuchElementException(" Imóvel não encontrado"));
     }
 
     @Override
@@ -45,7 +45,9 @@ public class ImovelServiceImpl implements ImovelService {
 
     @Override
     @Transactional
-    public ImovelDTO updateImovel(ImovelDTO imovelDTO) {
+    public ImovelDTO updateImovel(Long id, ImovelDTO imovelDTO) {
+        repositoryImovel.findById(id)
+                .orElseThrow(() -> new NoSuchElementException(" Imóvel não encontrado."));
         Imovel imovel = mapper.map(imovelDTO,Imovel.class);
         repositoryImovel.save(imovel);
 
@@ -54,6 +56,8 @@ public class ImovelServiceImpl implements ImovelService {
 
     @Override
     public void deleteImovel(Long id) {
+        repositoryImovel.findById(id)
+                .orElseThrow(() -> new NoSuchElementException(" Imóvel não encontrado."));
         repositoryImovel.deleteById(id);
     }
 }

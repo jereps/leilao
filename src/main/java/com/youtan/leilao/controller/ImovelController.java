@@ -19,8 +19,9 @@ public class ImovelController {
     }
 
     @GetMapping
-    public List<ImovelDTO> listImoveis() {
-        return imovelService.findAll();
+    public ResponseEntity<List<ImovelDTO>> listImoveis() {
+
+        return ResponseEntity.status(HttpStatus.OK).body(imovelService.findAll());
     }
 
     @GetMapping("/{id}")
@@ -33,10 +34,10 @@ public class ImovelController {
         return ResponseEntity.status(HttpStatus.CREATED).body(imovelService.createImovel(imovelDTO));
     }
 
-    @PutMapping
-    public ResponseEntity<ImovelDTO> updateImovel(@RequestBody ImovelDTO imovelDTO) {
+    @PutMapping("/{id}")
+    public ResponseEntity<ImovelDTO> updateImovel(@PathVariable Long id,@RequestBody ImovelDTO imovelDTO) {
 
-        return ResponseEntity.status(HttpStatus.OK).body(imovelService.updateImovel(imovelDTO));
+        return ResponseEntity.status(HttpStatus.OK).body(imovelService.updateImovel(id, imovelDTO));
     }
 
     @DeleteMapping("/{id}")

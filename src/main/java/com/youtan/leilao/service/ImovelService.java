@@ -11,7 +11,7 @@ public interface ImovelService {
 
     ImovelDTO createImovel(ImovelDTO imovelDTO);
 
-    ImovelDTO updateImovel(ImovelDTO imovelDTO);
+    ImovelDTO updateImovel(Long id, ImovelDTO imovelDTO);
 
     void deleteImovel(Long id);
 }
