@@ -11,7 +11,7 @@ public interface VeiculoService {
 
     VeiculoDTO createVeiculo(VeiculoDTO veiculoDTO);
 
-    VeiculoDTO updateVeiculo(VeiculoDTO veiculoDTO);
+    VeiculoDTO updateVeiculo(Long id, VeiculoDTO veiculoDTO);
 
     void deleteVeiculo(Long id);
 }

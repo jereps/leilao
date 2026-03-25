@@ -2,6 +2,7 @@ package com.youtan.leilao.controller;
 
 import com.youtan.leilao.DTO.VeiculoDTO;
 import com.youtan.leilao.service.VeiculoService;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +20,8 @@ public class VeiculoController {
     }
 
     @GetMapping
-    public List<VeiculoDTO> listVeiculo() {
-        return veiculoService.findAll();
+    public ResponseEntity<List<VeiculoDTO>> listVeiculo() {
+        return ResponseEntity.status(HttpStatus.OK).body(veiculoService.findAll());
     }
 
     @GetMapping("/{id}")
@@ -33,10 +34,10 @@ public class VeiculoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(veiculoService.createVeiculo(VeiculoDTO));
     }
 
-    @PutMapping
-    public ResponseEntity<VeiculoDTO> updateVeiculo(@RequestBody VeiculoDTO VeiculoDTO) {
+    @PutMapping("/{id}")
+    public ResponseEntity<VeiculoDTO> updateVeiculo(@PathVariable Long id, @RequestBody VeiculoDTO VeiculoDTO) {
 
-        return ResponseEntity.status(HttpStatus.OK).body(veiculoService.updateVeiculo(VeiculoDTO));
+        return ResponseEntity.status(HttpStatus.OK).body(veiculoService.updateVeiculo(id,VeiculoDTO));
     }
 
     @DeleteMapping("/{id}")
