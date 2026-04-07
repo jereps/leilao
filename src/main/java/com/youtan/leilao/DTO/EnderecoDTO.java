@@ -4,9 +4,6 @@ import com.youtan.leilao.model.Bairro;
 import com.youtan.leilao.model.CEP;
 import com.youtan.leilao.model.Cidade;
 import com.youtan.leilao.model.Estado;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 
 public record EnderecoDTO(
     Long id,

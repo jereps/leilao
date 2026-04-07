@@ -4,40 +4,42 @@ import com.youtan.leilao.DTO.EnderecoDTO;
 import com.youtan.leilao.model.*;
 import com.youtan.leilao.repository.*;
 import lombok.Data;
+import org.springframework.stereotype.Service;
 
 @Data
+@Service
 public class EnderecoServiceImpl implements EnderecoService{
 
-    private EnderecoRepository enderecoRepository;
-    private CEPRepository cepRepository;
-    private BairroRepository bairroRepository;
-    private CidadeRepository cidadeRepository;
-    private EstadoRepository estadoRepository;
+    private final EnderecoRepository enderecoRepository;
+    private final CEPRepository cepRepository;
+    private final BairroRepository bairroRepository;
+    private final CidadeRepository cidadeRepository;
+    private final EstadoRepository estadoRepository;
 
 
     @Override
-    public Endereco validarEndereco(EnderecoDTO enderecoDTO) {
-        CEP cep = validarCEP(enderecoDTO.cep());
-        Bairro bairro = validarBairro(enderecoDTO.bairro());
-        Cidade cidade = validarCidade(enderecoDTO.cidade());
-        Estado estado = validaEstado(enderecoDTO.estado());
+    public Endereco validarEndereco(Endereco enderecoDTO) {
+        CEP cep = validarCEP(enderecoDTO.getCep());
+        Bairro bairro = validarBairro(enderecoDTO.getBairro());
+        Cidade cidade = validarCidade(enderecoDTO.getCidade());
+        Estado estado = validaEstado(enderecoDTO.getEstado());
 
-        Endereco endereco = enderecoRepository.findById(enderecoDTO.id())
+        Endereco endereco = enderecoRepository.findById(enderecoDTO.getId())
                 .orElseGet(() -> {
                     Endereco novo = new Endereco();
                     novo.setBairro(bairro);
                     novo.setCidade(cidade);
                     novo.setEstado(estado);
                     novo.setCep(cep);
-                    novo.setRua(enderecoDTO.rua());
-                    novo.setNumero(enderecoDTO.numero());
-                    novo.setComplemento(enderecoDTO.complemento());
+                    novo.setRua(enderecoDTO.getRua());
+                    novo.setNumero(enderecoDTO.getNumero());
+                    novo.setComplemento(enderecoDTO.getComplemento());
                     return enderecoRepository.save(novo);
                 });
         return endereco;
     }
 
-    public CEP validarCEP(CEP cep){
+    private CEP validarCEP(CEP cep){
         CEP cep1 = cepRepository.findById(cep.getId())
                 .orElseGet(() -> {
                     CEP novo = new CEP();
@@ -47,7 +49,7 @@ public class EnderecoServiceImpl implements EnderecoService{
         return  cep1;
     }
 
-    public Bairro validarBairro(Bairro bairro){
+    private Bairro validarBairro(Bairro bairro){
         Bairro bairro1 = bairroRepository.findById(bairro.getId())
                 .orElseGet(() -> {
                     Bairro novo = new Bairro();
@@ -57,7 +59,7 @@ public class EnderecoServiceImpl implements EnderecoService{
         return  bairro1;
     }
 
-    public Cidade validarCidade(Cidade cidade){
+    private Cidade validarCidade(Cidade cidade){
         Cidade cidade1 = cidadeRepository.findById(cidade.getId())
                 .orElseGet(() -> {
                     Cidade novo = new Cidade();
@@ -67,7 +69,7 @@ public class EnderecoServiceImpl implements EnderecoService{
         return  cidade1;
     }
 
-    public Estado  validaEstado(Estado estado){
+    private Estado  validaEstado(Estado estado){
         Estado estado1 = estadoRepository.findById(estado.getId())
                 .orElseGet(() -> {
                     Estado novo = new Estado();

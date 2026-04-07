@@ -1,15 +1,11 @@
 package com.youtan.leilao.service;
 
 import com.youtan.leilao.DTO.EnderecoDTO;
-import com.youtan.leilao.model.Bairro;
-import com.youtan.leilao.model.Cidade;
 import com.youtan.leilao.model.Endereco;
-import com.youtan.leilao.model.Estado;
+import org.springframework.stereotype.Service;
 
+@Service
 public interface EnderecoService {
 
-    public Endereco validarEndereco(EnderecoDTO enderecoDTO);
-    public Bairro validarBairro(Bairro bairro);
-    public Cidade validarCidade(Cidade cidade);
-    public Estado validaEstado(Estado estado);
+    public Endereco validarEndereco(Endereco enderecoDTO);
 }
