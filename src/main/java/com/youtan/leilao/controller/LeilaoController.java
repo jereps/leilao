@@ -1,5 +1,6 @@
 package com.youtan.leilao.controller;
 
+import com.youtan.leilao.DTO.ItemLeilaoDTO;
 import com.youtan.leilao.DTO.LeilaoDTO;
 import com.youtan.leilao.service.LeilaoService;
 import org.springframework.http.HttpStatus;
@@ -43,6 +44,12 @@ public class LeilaoController {
     @DeleteMapping("/{id}")
     public ResponseEntity deleteLeilao(@PathVariable Long id) {
         leilaoService.deleteLeilao(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PostMapping("/{id}/{tipo}")
+    public ResponseEntity addItensLeilao(@PathVariable Long id, @PathVariable String tipo, @RequestBody  List<ItemLeilaoDTO> novosItens){
+        leilaoService.addItensAoLeilao(id,novosItens,tipo);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
     

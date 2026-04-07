@@ -12,8 +12,8 @@ public class LeilaoDTO {
     private Long id;
     private String nome;
     private LocalDateTime dataHorarioLeilao;
-    private Endereco enderecoLeilao;
-    private List<ItemLeilaoDTO> itensDTO;
+    private Endereco enderecoLeilaoDTO;
+    private List<ItemLeilaoDTO> mercadoria;
     private TipoCategoria categoria;
     private String descricao;
 }

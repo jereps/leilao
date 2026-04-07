@@ -5,6 +5,7 @@ import com.youtan.leilao.model.Imovel;
 import com.youtan.leilao.repository.ImovelRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +13,12 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+@Data
 @Service
-@AllArgsConstructor
 public class ImovelServiceImpl implements ImovelService {
 
     private final ImovelRepository repositoryImovel;
+    private final EnderecoService enderecoService;
     private final ModelMapper mapper;
 
 
@@ -32,12 +34,14 @@ public class ImovelServiceImpl implements ImovelService {
         return repositoryImovel.findById(id)
                 .map(imovel -> mapper.map(imovel,ImovelDTO.class))
                 .orElseThrow(() -> new NoSuchElementException(" Imóvel não encontrado"));
+
     }
 
     @Override
     @Transactional
     public ImovelDTO createImovel(ImovelDTO imovelDTO) {
         Imovel imovel = mapper.map(imovelDTO,Imovel.class);
+        imovel.setEndereco(enderecoService.validarEndereco(imovelDTO.endereco()));
         repositoryImovel.save(imovel);
 
         return mapper.map(imovel,ImovelDTO.class);
@@ -49,6 +53,7 @@ public class ImovelServiceImpl implements ImovelService {
         repositoryImovel.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(" Imóvel não encontrado."));
         Imovel imovel = mapper.map(imovelDTO,Imovel.class);
+        imovel.setEndereco(enderecoService.validarEndereco(imovelDTO.endereco()));
         repositoryImovel.save(imovel);
 
         return mapper.map(imovel,ImovelDTO.class);
