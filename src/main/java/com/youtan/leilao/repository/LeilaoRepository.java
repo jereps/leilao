@@ -1,0 +1,16 @@
+package com.youtan.leilao.repository;
+
+import com.youtan.leilao.model.Leilao;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+@Repository
+public interface LeilaoRepository extends JpaRepository<Leilao,Long> {
+
+    @Query("SELECT l FROM Leilao l LEFT JOIN FETCH l.itens WHERE l.id = :id")
+    Optional<Leilao> findLeilaoWithItens(@Param("id") Long id);
+}

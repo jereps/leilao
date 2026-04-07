@@ -1,7 +1,10 @@
 package com.youtan.leilao.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -23,23 +26,19 @@ public class Endereco {
     @Column(length = 200)
     private String complemento;
 
-    @OneToMany(mappedBy = "endereco",fetch = FetchType.LAZY)
-//    @JoinColumn(name = "imovel_id")
-    private List<Imovel> imovel;
-
-    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn(name = "cep_id")
     private CEP cep;
 
-    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn(name = "bairro_id")
     private Bairro bairro;
 
-    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn(name = "cidade_id")
     private Cidade cidade;
 
-    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn(name = "estado_id")
     private Estado estado;
 
