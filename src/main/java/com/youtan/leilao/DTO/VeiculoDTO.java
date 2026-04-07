@@ -6,7 +6,7 @@ import com.youtan.leilao.model.TipoVeículo;
 
 import java.math.BigDecimal;
 
-public record VeiculoDTO(
+public record VeiculoDTO (
     Long id,
     String placa,
     String marcaModelo,
@@ -18,4 +18,4 @@ public record VeiculoDTO(
     Integer qtdPassageiros,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "#,##0.00",locale = "pt-BR")
     BigDecimal valor
-) {}
+) implements ItemLeilaoDTO {}

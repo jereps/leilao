@@ -26,7 +26,7 @@ public class Imovel {
     @Column(length = 200, nullable = false)
     private String nome;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @ManyToOne()
     @JoinColumn(name = "endereco_id")
     private Endereco endereco;
 

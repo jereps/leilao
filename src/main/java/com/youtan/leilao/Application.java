@@ -19,27 +19,27 @@ public class Application {
 	@Bean
 	CommandLineRunner initDatabase(ImovelRepository repository, EnderecoRepository enderecoRepository
 	, CEPRepository cepRepository, EstadoRepository estadoRepository, CidadeRepository cidadeRepository
-	, BairroRepository bairroRepository) {
+	, BairroRepository bairroRepository, VeiculoRepository veiculoRepository) {
 		return args -> {
 
 			CEP cep = new CEP();
 			cep.setCep("12231815");
-//			cepRepository.save(cep);
+			cepRepository.save(cep);
 
 			Estado estado = new Estado();
 			estado.setNome("São Paulo");
 			estado.setSigla("SP");
-//			estadoRepository.save(estado);
+			estadoRepository.save(estado);
 
 			Cidade cidade = new Cidade();
 			cidade.setNome("São Paulo");
 //			cidade.setEstado(estado);
-//			cidadeRepository.saveAndFlush(cidade);
+			cidadeRepository.save(cidade);
 
 			Bairro bairro = new Bairro();
 //			bairro.setCidade(cidade);
 			bairro.setNomeBairro("JD Satélite");
-//			bairroRepository.saveAndFlush(bairro);
+			bairroRepository.save(bairro);
 
 			Endereco endereco = new Endereco();
 			endereco.setNumero("12");
@@ -49,9 +49,10 @@ public class Application {
 			endereco.setCep(cep);
 			endereco.setCidade(cidade);
 			endereco.setEstado(estado);
-//			enderecoRepository.save(endereco);
+			enderecoRepository.save(endereco);
 
 			Imovel imovel = new Imovel();
+			Imovel imovel2 = new Imovel();
 
 			imovel.setEndereco(endereco);
 			imovel.setNome("campos");
@@ -61,8 +62,29 @@ public class Application {
 			imovel.setNQuartos(3);
 			imovel.setNBanheiros(1);
 
+			imovel2.setEndereco(endereco);
+			imovel2.setNome("campos2");
+			imovel2.setTipoImovel(TipoImovel.COMERCIAL);
+			imovel2.setPreco(BigDecimal.valueOf(123.20));
+			imovel2.setMetragem(20);
+			imovel2.setNQuartos(0);
+			imovel2.setNBanheiros(2);
+
 //			repository.saveAndFlush(imovel);
 			repository.save(imovel);
+			repository.save(imovel2);
+
+			Veiculo veiculo = new Veiculo();
+			veiculo.setAnoFabricacao(1900);
+			veiculo.setCor("amarela");
+			veiculo.setPlaca("hq12312");
+			veiculo.setMarcaModelo("Uno Fiat");
+			veiculo.setNPortas(2);
+			veiculo.setQtdPassageiros(5);
+			veiculo.setValor(BigDecimal.valueOf(12.20));
+			veiculo.setTipoCombustível(TipoCombustivel.GASOLINA);
+			veiculo.setTipoVeículo(TipoVeículo.PASSEIO);
+			veiculoRepository.save(veiculo);
 		};
 	}
 }
