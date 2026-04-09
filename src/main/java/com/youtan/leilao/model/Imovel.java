@@ -2,7 +2,6 @@ package com.youtan.leilao.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -33,5 +32,9 @@ public class Imovel {
     private Integer metragem;
     private Integer nQuartos;
     private Integer nBanheiros;
+
+    public void incrementarValor(BigDecimal valor){
+        this.preco = this.preco.add(valor);
+    }
 
 }

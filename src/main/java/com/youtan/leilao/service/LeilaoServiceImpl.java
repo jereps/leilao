@@ -1,23 +1,18 @@
 package com.youtan.leilao.service;
 
-import com.youtan.leilao.DTO.ImovelDTO;
-import com.youtan.leilao.DTO.ItemLeilaoDTO;
-import com.youtan.leilao.DTO.LeilaoDTO;
-import com.youtan.leilao.DTO.VeiculoDTO;
-import com.youtan.leilao.model.Endereco;
-import com.youtan.leilao.model.Imovel;
-import com.youtan.leilao.model.Leilao;
-import com.youtan.leilao.model.Veiculo;
+import com.youtan.leilao.DTO.*;
+import com.youtan.leilao.model.*;
 import com.youtan.leilao.repository.ImovelRepository;
+import com.youtan.leilao.repository.LanceHistoricoRepository;
 import com.youtan.leilao.repository.LeilaoRepository;
 import com.youtan.leilao.repository.VeiculoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -29,6 +24,7 @@ public class LeilaoServiceImpl implements LeilaoService {
     private final ImovelRepository imovelRepository;
     private final VeiculoRepository veiculoRepository;
     private final EnderecoService enderecoService;
+    private final LanceHistoricoRepository lanceHistoricoRepository;
     private final ModelMapper mapper;
 
 
@@ -129,6 +125,7 @@ public class LeilaoServiceImpl implements LeilaoService {
         leilaoRepository.save(leilao);
     }
 
+
     private void validarTipoUnico(Leilao leilao, List<ItemLeilaoDTO> novosItens) {
         if (novosItens.isEmpty()) return;
 
@@ -190,4 +187,85 @@ public class LeilaoServiceImpl implements LeilaoService {
             }
         }
     }
+
+    @Override
+    public void novoLance(LanceDTO lance) {
+
+        validarIncrementoLance(lance.valor());
+
+        Leilao leilao = leilaoRepository.findById(lance.idLeilao())
+                .orElseThrow(() -> new EntityNotFoundException("Leilão não encontrado"));
+
+        var item = switch (leilao.getCategoria()){
+            case TipoCategoria.IMOVEL -> imovelRepository.findById(lance.idItem());
+            case TipoCategoria.VEICULO -> veiculoRepository.findById(lance.idItem());
+        };
+
+
+        if(leilao.getItens().contains(item.get())){
+            incrementarValorBem(lance.valor(),item.get());
+            historicoLance(lance,item.get());
+        }
+
+    }
+
+    private void validarIncrementoLance(BigDecimal valor) {
+        String message = """ 
+                    Valor para lance não aceito,
+                    necessário incremento de no mínimo R$ 200,00
+                    """;
+
+        if(valor.remainder(BigDecimal.valueOf(200)).compareTo(BigDecimal.ZERO) > 0){
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+
+    private void incrementarValorBem(BigDecimal valor, Object o) {
+        switch (o){
+            case Imovel i -> {
+                i.incrementarValor(valor);
+                imovelRepository.save(i);
+            }
+            case Veiculo v -> {
+                v.incrementarValor(valor);
+                veiculoRepository.save(v);
+            }
+            default -> throw new IllegalStateException("Tipo não suportado " + o);
+        };
+    }
+
+    private void historicoLance(LanceDTO lance, Object o) {
+        LanceHistorico historico = new LanceHistorico();
+        historico.setItem(o);
+        historico.setValor(lance.valor());
+        historico.setCliente(lance.cliente());
+        lanceHistoricoRepository.save(historico);
+    }
+
+    @Override
+    public List<LanceHistoricoDTO> getHistorico(Long id, String tipo) {
+
+        Object item = switch (tipo.toUpperCase()) {
+            case "IMOVEL"  -> imovelRepository.getReferenceById(id);
+            case "VEICULO" -> veiculoRepository.getReferenceById(id);
+            default -> throw new IllegalArgumentException("Tipo inválido");
+        };
+
+        return lanceHistoricoRepository.findByItem(item).stream()
+                .map(historico -> converterLanceHistoricoParaDTO(historico))
+                .collect(Collectors.toList());
+    }
+
+    private LanceHistoricoDTO converterLanceHistoricoParaDTO(LanceHistorico historico) {
+        ItemLeilaoDTO item = switch (historico.getItem()) {
+                    case Imovel i  -> mapper.map(i, ImovelDTO.class);
+                    case Veiculo v -> mapper.map(v, VeiculoDTO.class);
+                    default        -> throw new IllegalStateException("Tipo não suportado");
+                };
+        LanceHistoricoDTO lanceHist = mapper.map(historico,LanceHistoricoDTO.class);
+        lanceHist.setItem(item);
+        return lanceHist;
+    }
+
 }

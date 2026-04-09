@@ -8,6 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Arrays;
 
 @SpringBootApplication
 public class Application {
@@ -19,7 +21,8 @@ public class Application {
 	@Bean
 	CommandLineRunner initDatabase(ImovelRepository repository, EnderecoRepository enderecoRepository
 	, CEPRepository cepRepository, EstadoRepository estadoRepository, CidadeRepository cidadeRepository
-	, BairroRepository bairroRepository, VeiculoRepository veiculoRepository) {
+	, BairroRepository bairroRepository, VeiculoRepository veiculoRepository,
+	LeilaoRepository leilaoRepository) {
 		return args -> {
 
 			CEP cep = new CEP();
@@ -85,6 +88,16 @@ public class Application {
 			veiculo.setTipoCombustível(TipoCombustivel.GASOLINA);
 			veiculo.setTipoVeículo(TipoVeículo.PASSEIO);
 			veiculoRepository.save(veiculo);
+
+			Leilao leilao = new Leilao();
+			leilao.setItens(Arrays.asList(veiculo));
+			leilao.setEnderecoLeilao(endereco);
+			leilao.setDescricao("leilao teste");
+			leilao.setNome("novo");
+			leilao.setCategoria(TipoCategoria.VEICULO);
+			leilao.setDataHorarioLeilao(LocalDateTime.now());
+			leilaoRepository.save(leilao);
+
 		};
 	}
 }

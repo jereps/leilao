@@ -1,6 +1,7 @@
 package com.youtan.leilao.controller;
 
 import com.youtan.leilao.DTO.ItemLeilaoDTO;
+import com.youtan.leilao.DTO.LanceDTO;
 import com.youtan.leilao.DTO.LeilaoDTO;
 import com.youtan.leilao.service.LeilaoService;
 import org.springframework.http.HttpStatus;
@@ -51,6 +52,17 @@ public class LeilaoController {
     public ResponseEntity addItensLeilao(@PathVariable Long id, @PathVariable String tipo, @RequestBody  List<ItemLeilaoDTO> novosItens){
         leilaoService.addItensAoLeilao(id,novosItens,tipo);
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PostMapping("/lance")
+    public ResponseEntity novoLance(@RequestBody LanceDTO lance){
+        leilaoService.novoLance(lance);
+        return ResponseEntity.status(HttpStatus.OK).body("entrou");
+    }
+
+    @GetMapping("historico/{id}/{tipo}")
+    public ResponseEntity lanceHistoricoItem(@PathVariable Long id,@PathVariable String tipo){
+        return ResponseEntity.status(HttpStatus.OK).body(leilaoService.getHistorico(id,tipo));
     }
     
     

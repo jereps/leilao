@@ -43,4 +43,8 @@ public class Veiculo {
     @Column(precision = 25, scale = 2)
     private BigDecimal valor;
 
+    public void incrementarValor(BigDecimal valor){
+        this.valor = this.valor.add(valor);
+    }
+
 }

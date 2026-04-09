@@ -24,7 +24,7 @@ public class Leilao {
     @Column( nullable = false)
     private LocalDateTime dataHorarioLeilao;
 
-    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @OneToOne()
     @JoinColumn(name = "endereco_id")
     private Endereco enderecoLeilao;
 

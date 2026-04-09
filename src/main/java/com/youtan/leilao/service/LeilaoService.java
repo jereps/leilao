@@ -2,8 +2,9 @@ package com.youtan.leilao.service;
 
 
 import com.youtan.leilao.DTO.ItemLeilaoDTO;
+import com.youtan.leilao.DTO.LanceDTO;
+import com.youtan.leilao.DTO.LanceHistoricoDTO;
 import com.youtan.leilao.DTO.LeilaoDTO;
-import lombok.Data;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,4 +22,8 @@ public interface LeilaoService {
     void deleteLeilao(Long id);
 
     public void addItensAoLeilao(Long leilaoId, List<ItemLeilaoDTO> novosItens,String tipo);
+
+    void novoLance(LanceDTO lance);
+
+    List<LanceHistoricoDTO> getHistorico(Long id, String tipo);
 }
