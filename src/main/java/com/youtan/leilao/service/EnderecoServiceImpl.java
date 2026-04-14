@@ -1,6 +1,5 @@
 package com.youtan.leilao.service;
 
-import com.youtan.leilao.DTO.EnderecoDTO;
 import com.youtan.leilao.model.*;
 import com.youtan.leilao.repository.*;
 import lombok.Data;

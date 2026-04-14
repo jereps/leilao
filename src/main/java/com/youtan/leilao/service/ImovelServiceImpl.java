@@ -4,7 +4,6 @@ import com.youtan.leilao.DTO.ImovelDTO;
 import com.youtan.leilao.model.Imovel;
 import com.youtan.leilao.repository.ImovelRepository;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
