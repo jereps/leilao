@@ -6,5 +6,6 @@ public record LanceDTO(
    Long idLeilao,
    Long idItem,
    BigDecimal valor,
-   String cliente
+   Long idCliente
+
 ) {}

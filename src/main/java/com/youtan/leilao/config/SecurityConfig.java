@@ -30,7 +30,6 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csfr -> csfr.disable())
-//                .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
                 .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
                 .cors(cors -> cors.configure(http))
                 .sessionManagement(
@@ -46,8 +45,6 @@ public class SecurityConfig {
                                 "/h2-console/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/leilao").permitAll()
                         .requestMatchers(HttpMethod.GET, "/leilao/{id}").permitAll()
-//                        .requestMatchers("/test/admin").hasRole("ADMIN")
-//                        .requestMatchers("/test/user").hasAnyRole("USER","ADMIN")
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

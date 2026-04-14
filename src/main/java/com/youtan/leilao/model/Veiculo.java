@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 public class Veiculo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(length = 7, nullable = false)
@@ -28,9 +28,11 @@ public class Veiculo {
     private String Cor;
 
     @Column(length = 10, nullable = false)
+    @Enumerated(EnumType.STRING)
     private TipoCombustivel tipoCombustível;
 
     @Column(length = 10, nullable = false)
+    @Enumerated(EnumType.STRING)
     private TipoVeículo tipoVeículo;
 
     @Column(length = 10, nullable = false)

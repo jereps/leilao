@@ -12,10 +12,11 @@ import java.math.BigDecimal;
 public class Imovel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private TipoImovel tipoImovel;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "#,##0.00",locale = "pt-BR")
