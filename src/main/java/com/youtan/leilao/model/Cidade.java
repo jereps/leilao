@@ -9,14 +9,10 @@ import lombok.Data;
 public class Cidade {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(length = 200, nullable = false)
     private String nome;
-
-//    @ManyToOne
-//    @JoinColumn(name = "estado_id")
-//    private Estado estado;
 
 }

@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public ResponseEntity register(RegisterUserRequest userRequest) {
-        if (userRepository.findUserByEmail(userRequest.email()).isPresent()) return ResponseEntity.badRequest().build();
+        if (userRepository.findUserByEmail(userRequest.email()).isPresent()) return ResponseEntity.badRequest().body("error.user.email.exists");
 
         User user = new User();
         user.setPassword(passwordEncoder.encode(userRequest.password()));

@@ -15,7 +15,7 @@ import java.util.List;
 public class Leilao {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(length = 200, nullable = false)
@@ -40,6 +40,7 @@ public class Leilao {
     private List<Object> itens;
 
     @Column(length = 10, nullable = false)
+    @Enumerated(EnumType.STRING)
     private TipoCategoria categoria;
 
     @Column(name = "descricao")

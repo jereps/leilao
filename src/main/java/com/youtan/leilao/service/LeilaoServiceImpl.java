@@ -2,10 +2,7 @@ package com.youtan.leilao.service;
 
 import com.youtan.leilao.DTO.*;
 import com.youtan.leilao.model.*;
-import com.youtan.leilao.repository.ImovelRepository;
-import com.youtan.leilao.repository.LanceHistoricoRepository;
-import com.youtan.leilao.repository.LeilaoRepository;
-import com.youtan.leilao.repository.VeiculoRepository;
+import com.youtan.leilao.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.Data;
@@ -13,7 +10,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Data
@@ -25,6 +24,7 @@ public class LeilaoServiceImpl implements LeilaoService {
     private final VeiculoRepository veiculoRepository;
     private final EnderecoService enderecoService;
     private final LanceHistoricoRepository lanceHistoricoRepository;
+    private final UserRepository userRepository;
     private final ModelMapper mapper;
 
 
@@ -236,10 +236,15 @@ public class LeilaoServiceImpl implements LeilaoService {
     }
 
     private void historicoLance(LanceDTO lance, Object o) {
+
+        User user = userRepository.findById(lance.idCliente()).orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+        Leilao leilao = leilaoRepository.findById(lance.idLeilao()).orElseThrow(() -> new EntityNotFoundException("Leilão não encontrado"));
+
         LanceHistorico historico = new LanceHistorico();
         historico.setItem(o);
         historico.setValor(lance.valor());
-        historico.setCliente(lance.cliente());
+        historico.setUser(user);
+        historico.setLeilao(leilao);
         lanceHistoricoRepository.save(historico);
     }
 
