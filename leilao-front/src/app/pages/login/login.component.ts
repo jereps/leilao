@@ -4,6 +4,7 @@ import { DefaultLoginLayoutComponent } from '../../components/default-login-layo
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PrimaryInputComponent } from '../../components/primary-input/primary-input.component';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-login',
@@ -13,7 +14,8 @@ import { Router } from '@angular/router';
         PrimaryInputComponent
     ],
     providers: [
-        LoginService
+        LoginService,
+        ToastrService
     ],
     templateUrl: './login.component.html',
     styleUrl: './login.component.scss'
@@ -23,7 +25,8 @@ export class LoginComponent {
 
   constructor(
     private router: Router,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private toastrService: ToastrService
   ){
     this.loginForm = new FormGroup({
       email: new FormControl('', [Validators.required,Validators.email]),
@@ -33,8 +36,8 @@ export class LoginComponent {
 
   submit(){
     this.loginService.login(this.loginForm.value.email,this.loginForm.value.password).subscribe({
-      next: () => console.log("sucesso"),
-      error: () => console.error("error")
+      next: () => this.toastrService.success("Login feito com sucesso!"),
+      error: () => this.toastrService.error("Erro inesperado! Tente novamente")
     })
   }
 

@@ -1,4 +1,4 @@
-@import "../../../styles/variables.scss";
+@use "../../../styles/variables.scss" as *;
 
 main {
 
@@ -64,6 +64,10 @@ main {
       background: transparent;
       padding: 12px 24px;
       cursor: pointer;
+
+      &:disabled {
+        opacity: 0.5;
+      }
 
       &.btn-primary {
         background-color: $primary-color;
