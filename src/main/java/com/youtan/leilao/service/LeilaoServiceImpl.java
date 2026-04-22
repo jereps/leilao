@@ -178,12 +178,12 @@ public class LeilaoServiceImpl implements LeilaoService {
                 // getReferenceById é mais performático aqui: não faz SELECT,
                 // apenas cria um proxy com o ID para salvar na tabela de ligação
                 Imovel imovel = mapper.map(item,Imovel.class);
-                leilao.getItens().add(imovel);
+                leilao.getItens().add(imovelRepository.save(imovel));
             }
-        } else if (leilaoDTO.getMercadoria().get(0).equals(VeiculoDTO.class)) {
+        } else if (leilaoDTO.getMercadoria().get(0) instanceof VeiculoDTO) {
             for (ItemLeilaoDTO item : leilaoDTO.getMercadoria()) {
                 Veiculo veiculo = mapper.map(item,Veiculo.class);
-                leilao.getItens().add(veiculo);
+                leilao.getItens().add(veiculoRepository.save(veiculo));
             }
         }
     }

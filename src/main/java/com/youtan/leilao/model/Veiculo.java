@@ -29,11 +29,11 @@ public class Veiculo {
 
     @Column(length = 10, nullable = false)
     @Enumerated(EnumType.STRING)
-    private TipoCombustivel tipoCombustível;
+    private TipoCombustivel tipoCombustivel;
 
     @Column(length = 10, nullable = false)
     @Enumerated(EnumType.STRING)
-    private TipoVeículo tipoVeículo;
+    private TipoVeículo tipoVeiculo;
 
     @Column(length = 10, nullable = false)
     private Integer nPortas;
