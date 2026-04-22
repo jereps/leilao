@@ -1,5 +1,5 @@
 export interface Leilao {
-  _id: number;
+  id: number;
   nome: string;
   dataHorarioLeilao: Date;
   categoria: string;

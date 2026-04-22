@@ -5,6 +5,7 @@ import com.youtan.leilao.model.*;
 import com.youtan.leilao.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.Null;
 import lombok.Data;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -48,10 +49,12 @@ public class LeilaoServiceImpl implements LeilaoService {
         Leilao leilao = mapper.map(leilaoDTO,Leilao.class);
         leilao.setItens(new ArrayList<>());
         leilao.setEnderecoLeilao(enderecoService.validarEndereco(leilaoDTO.getEnderecoLeilaoDTO()));
-        validarTipoUnico(leilao,leilaoDTO.getMercadoria());
 
+        if (!(leilaoDTO.getMercadoria() == null) && !leilaoDTO.getMercadoria().isEmpty()) {
+            validarTipoUnico(leilao,leilaoDTO.getMercadoria());
+            converterItensLeilao(leilao,leilaoDTO);
+        }
 
-        converterItensLeilao(leilao,leilaoDTO);
 //        leilao.getItens().addAll(leilaoDTO.getItensDTO());
         leilaoRepository.save(leilao);
 
@@ -127,7 +130,7 @@ public class LeilaoServiceImpl implements LeilaoService {
 
 
     private void validarTipoUnico(Leilao leilao, List<ItemLeilaoDTO> novosItens) {
-        if (novosItens.isEmpty()) return;
+        if (novosItens == null || novosItens.isEmpty()  ) return;
 
 
         // Pega o tipo do primeiro item da nova lista

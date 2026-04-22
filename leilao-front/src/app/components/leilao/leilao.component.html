@@ -1,6 +1,12 @@
 <mat-card>
   <mat-card-content>
     <table mat-table [dataSource]="leiloes" class="mat-elevation-z8">
+
+            <!-- Nome Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>id</th>
+        <td mat-cell *matCellDef="let leilao">{{ leilao.id }}</td>
+      </ng-container>
       <!-- Nome Column -->
       <ng-container matColumnDef="nome">
         <th mat-header-cell *matHeaderCellDef>Leilão</th>
@@ -25,6 +31,27 @@
       <ng-container matColumnDef="descricao">
         <th mat-header-cell *matHeaderCellDef>Descricao</th>
         <td mat-cell *matCellDef="let leilao">{{ leilao.descricao }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef>
+          <button matMiniFab color="accent" aria-label="Adicionar um Leilão">
+            <mat-icon (click)="onAdd()" >add</mat-icon>
+          </button>
+        </mat-header-cell>
+
+        <mat-cell *matCellDef="let leilao">
+          <button matIconButton color="primary" aria-label="Editar Leilão">
+            <mat-icon>edit</mat-icon>
+          </button>
+
+          <button matIconButton color="warn" aria-label="Deletar Leilão">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-cell>
+
+
+
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

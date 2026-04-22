@@ -116,6 +116,14 @@ public class EnderecoServiceImpl implements EnderecoService{
                         novo.setNome(estado.getNome());
                         return estadoRepository.save(novo);
                     });
+        } else if (Optional.ofNullable(estado.getSigla()).isPresent()) {
+            estado1 = estadoRepository.findBySigla(estado.getSigla())
+                    .orElseGet(() -> {
+                        Estado novo = new Estado();
+                        novo.setSigla(estado.getSigla());
+                        novo.setNome(estado.getNome());
+                        return estadoRepository.save(novo);
+                    });
         } else {
             Estado novo = new Estado();
             novo.setSigla(estado.getSigla());

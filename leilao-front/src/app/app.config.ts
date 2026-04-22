@@ -4,10 +4,11 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideToastr } from 'ngx-toastr';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
+import { authInterceptor } from './services/auth.interceptor';
 registerLocaleData(localePt);
 
 
@@ -16,7 +17,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAnimationsAsync(),
     provideToastr(),
-    provideHttpClient(withFetch()),
+    provideHttpClient(withFetch(),withInterceptors([authInterceptor])),
     { provide: LOCALE_ID, useValue: 'pt-BR' }
   ]
 };
