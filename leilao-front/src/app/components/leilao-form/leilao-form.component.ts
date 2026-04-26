@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, input } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -11,6 +11,8 @@ import { Location } from '@angular/common';
 import { MatTimepickerModule } from '@angular/material/timepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { ActivatedRoute } from '@angular/router';
+import { LeilaoSubmit } from '../../model/leilao-submit';
 
 @Component({
   selector: 'app-leilao-form',
@@ -31,42 +33,54 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
   providers: [provideNativeDateAdapter()],
 })
 export class LeilaoFormComponent {
-  form: FormGroup;
-  select = '';
+  private route = inject(ActivatedRoute);
+  private location = inject(Location);
+  private snackBar = inject(MatSnackBar);
+  private service = inject(LeilaoService);
+  private formBuilder = inject(FormBuilder);
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private service: LeilaoService,
-    private snackBar: MatSnackBar,
-    private location: Location,
-  ) {
-    this.form = this.formBuilder.group({
-      nome: [],
-      dataHorarioLeilao: [],
+
+  // form: FormGroup;
+
+    leilao = input<LeilaoSubmit>();
+
+    // const leilao: LeilaoSubmit = this.route.snapshot.data['leilao'];
+
+    private dataFiller = effect(() => {
+      const data = this.leilao();
+      if (data) {
+        console.log(data);
+        this.form.patchValue(data);
+      }
+    });
+
+    form = this.formBuilder.nonNullable.group({
+      id: new Number(),
+      nome: '',
+      dataHorarioLeilao: new Date(),
       enderecoLeilaoDTO: this.formBuilder.group({
-        numero: [],
-        rua: [],
+        numero: '',
+        rua: '',
         cep: this.formBuilder.group({
-          cep: [],
+          cep: '',
         }),
         bairro: this.formBuilder.group({
-          nomeBairro: [],
+          nomeBairro: '',
         }),
         cidade: this.formBuilder.group({
-          nome: [],
+          nome: '',
         }),
         estado: this.formBuilder.group({
-          nome: [],
-          sigla: [],
+          nome: '',
+          sigla: '',
         }),
       }),
-      categoria: [],
-      descricao: [],
+      categoria: '',
+      descricao: '',
     });
-  }
 
   onSubmit() {
-    this.service.save(this.form.value).subscribe(
+    this.service.save(this.form.getRawValue() as LeilaoSubmit).subscribe(
       (result) => this.onSucsess(),
       (error) => this.onError(error),
     );

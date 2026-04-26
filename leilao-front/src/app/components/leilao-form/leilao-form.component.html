@@ -4,28 +4,11 @@
   </mat-card-header>
   <mat-card-content>
     <form [formGroup]="form">
-
       <mat-form-field class="full-width">
         <input matInput placeholder="Nome" formControlName="nome" />
       </mat-form-field>
 
       <mat-form-field class="full-width">
-  <mat-label>Meeting date</mat-label>
-  <input matInput [matDatepicker]="datepicker" formControlName="dataHorarioLeilao">
-  <mat-datepicker #datepicker/>
-  <mat-datepicker-toggle [for]="datepicker" matSuffix/>
-</mat-form-field>
-
-    <mat-form-field>
-      <mat-label>Meeting time</mat-label>
-      <input matInput
-        [matTimepicker]="timepicker"
-        formControlName="dataHorarioLeilao">
-      <mat-timepicker #timepicker/>
-      <mat-timepicker-toggle [for]="timepicker" matSuffix/>
-    </mat-form-field>
-
-      <mat-form-field class="full-width" >
         <mat-select formControlName="categoria" placeholder="categoria">
           <mat-option value="IMOVEL">IMOVEL</mat-option>
           <mat-option value="VEICULO">VEICULO</mat-option>
@@ -34,6 +17,28 @@
 
       <mat-form-field class="full-width">
         <input matInput placeholder="descricao" formControlName="descricao" />
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <input
+          matInput
+          [matDatepicker]="datepicker"
+          formControlName="dataHorarioLeilao"
+          placeholder="Data"
+        />
+        <mat-datepicker #datepicker />
+        <mat-datepicker-toggle [for]="datepicker" matSuffix />
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <input
+          matInput
+          [matTimepicker]="timepicker"
+          formControlName="dataHorarioLeilao"
+          placeholder="Hora"
+        />
+        <mat-timepicker #timepicker />
+        <mat-timepicker-toggle [for]="timepicker" matSuffix />
       </mat-form-field>
 
       <mat-card appearance="outlined">
@@ -86,7 +91,7 @@
                 />
               </mat-form-field>
 
-              <mat-form-field >
+              <mat-form-field>
                 <input
                   matInput
                   placeholder="Estado Sigla"
@@ -98,11 +103,11 @@
         </mat-card-content>
       </mat-card>
     </form>
-
   </mat-card-content>
-    <mat-card-actions>
-      <button matButton="elevated" color="primary" (click)="onSubmit()">Salvar</button>
-      <button matButton="elevated" color=""  (click)="onCancel()">Cancelar</button>
-    </mat-card-actions>
-
+  <mat-card-actions>
+    <button matButton="elevated" color="primary" (click)="onSubmit()">
+      Salvar
+    </button>
+    <button matButton="elevated" color="" (click)="onCancel()">Cancelar</button>
+  </mat-card-actions>
 </mat-card>

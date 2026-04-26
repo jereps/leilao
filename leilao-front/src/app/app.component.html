@@ -1,4 +1,12 @@
 <mat-toolbar color="primary">
-  <span>Leilão</span>
+  <span (click)="home()">Leilão</span>
+
+  <div class="container">
+    <button matIconButton (click)="onLogin()" color="$gray-bg" aria-label="Login" class="home">
+      <mat-icon aria-label="Login">login</mat-icon>
+    </button>
+  </div>
+
+
 </mat-toolbar>
 <router-outlet />

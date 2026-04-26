@@ -1,51 +1,72 @@
-import { Component } from '@angular/core';
-import { MatTableModule } from '@angular/material/table';
-import { Leilao } from '../../model/leilao';
-import { MatCardModule } from '@angular/material/card';
+import { Component, effect, inject } from '@angular/core';
 import { LeilaoService } from '../../services/leilao.service';
-import { catchError, Observable, of } from 'rxjs';
-import { DatePipe } from '@angular/common'; // 1. Importe o pipe
+import { catchError, of } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { LeilaoListComponent } from '../leilao-list/leilao-list.component';
+import { MatCardModule } from '@angular/material/card';
+import { LeilaoSubmit } from '../../model/leilao-submit';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { ActivatedRoute, Router, provideRouter } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-leilao',
-  imports: [
-    MatTableModule,
-    MatCardModule,
-    DatePipe,
-    MatIconModule,
-    MatButtonModule,
-  ],
+  imports: [LeilaoListComponent, MatIconModule, MatCardModule, MatButtonModule],
   templateUrl: './leilao.component.html',
   styleUrl: './leilao.component.scss',
 })
 export class LeilaoComponent {
-  leiloes: Observable<Leilao[]>;
-  displayedColumns: string[] = [
-    'id',
-    'nome',
-    'DataHorario',
-    'categoria',
-    'descricao',
-    'actions',
-  ];
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private leilaoService = inject(LeilaoService);
+  private snackBar = inject(MatSnackBar);
 
-  constructor(
-    private leilaoService: LeilaoService,
-    private router: Router,
-    private route: ActivatedRoute,
-  ) {
-    this.leiloes = this.leilaoService.lista().pipe(
+  leiloes = toSignal(
+    this.leilaoService.lista().pipe(
       catchError((error) => {
         console.log(error);
         return of([]);
       }),
-    );
+    ),
+    { initialValue: [] },
+  );
+
+  refresh(){
+    window.location.reload();
   }
+
+
 
   onAdd() {
     this.router.navigate(['new'], { relativeTo: this.route });
+  }
+
+  onEdit(leilao: LeilaoSubmit) {
+    this.router.navigate(['edit', leilao.id], { relativeTo: this.route });
+  }
+
+  onRemove(leilao: LeilaoSubmit) {
+    this.leilaoService.remove(leilao.id as number).subscribe(
+      (result) => {
+        this.snackBar.open('Leião removido com sucesso!', 'X', {
+          duration: 5000,
+          verticalPosition: 'top',
+          horizontalPosition: 'center',
+        });
+        this.refresh()
+      },
+      (error) => this.onError(error),
+    );
+
+  }
+
+  private onError(error: { error: { mensagem: any; erros: any } }) {
+    this.snackBar.open(
+      ` ${error.error.mensagem}
+          ${error.error.erros}`,
+      'Done',
+      { duration: 50000 },
+    );
   }
 }

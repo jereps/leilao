@@ -1,7 +1,8 @@
 export interface LeilaoSubmit {
+      id?: number,
       nome: string;
       dataHorarioLeilao: Date;
-      enderecoLeilaoDTO: {
+      enderecoLeilaoDTO?: {
         numero: string;
         rua: string;
         cep: {
