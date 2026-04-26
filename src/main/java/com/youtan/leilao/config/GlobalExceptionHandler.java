@@ -1,6 +1,5 @@
 package com.youtan.leilao.config;
 
-import com.youtan.leilao.model.Leilao;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -24,6 +23,19 @@ public class GlobalExceptionHandler {
         response.put("erros",ex.getMessage());
         response.put("erro",ex.getNextException());
 
+
+        return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    public static ResponseEntity<?> handleException(NullPointerException ex){
+
+        Map<String,Object> response = new HashMap<>();
+        response.put("status",ex.getCause());
+        response.put("timestamp", LocalDateTime.now());
+        response.put("mensagem","Erro geral");
+        response.put("erros",ex.getMessage());
+        response.put("erro",ex.getSuppressed());
 
         return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }

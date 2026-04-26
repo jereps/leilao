@@ -59,6 +59,7 @@ public class ImovelServiceImpl implements ImovelService {
     }
 
     @Override
+    @Transactional
     public void deleteImovel(Long id) {
         repositoryImovel.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(" Imóvel não encontrado."));

@@ -27,6 +27,8 @@ public class LeilaoServiceImpl implements LeilaoService {
     private final LanceHistoricoRepository lanceHistoricoRepository;
     private final UserRepository userRepository;
     private final ModelMapper mapper;
+    private final VeiculoService veiculoService;
+    private final ImovelService imovelService;
 
 
     @Override
@@ -68,18 +70,37 @@ public class LeilaoServiceImpl implements LeilaoService {
                 .orElseThrow(() -> new EntityNotFoundException(" Leilão não encontrado."));
         Leilao leilao = mapper.map(leilaoDTO,Leilao.class);
         leilao.setEnderecoLeilao(enderecoService.validarEndereco(leilaoDTO.getEnderecoLeilaoDTO()));
-        validarTipoUnico(leilao,leilaoDTO.getMercadoria());
-        leilao.getItens().addAll(leilaoDTO.getMercadoria());
+        if (leilaoDTO.getMercadoria() != null && !leilaoDTO.getMercadoria().isEmpty()) {
+            validarTipoUnico(leilao,leilaoDTO.getMercadoria());
+            leilao.getItens().addAll(leilaoDTO.getMercadoria());
+        }
+
         leilaoRepository.save(leilao);
 
         return converterParaDTO(leilao);
     }
 
     @Override
+    @Transactional
     public void deleteLeilao(Long id) {
         leilaoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(" Leilão não encontrado."));
+                .map(leilao -> {
+                if ( leilao.getItens() != null && !leilao.getItens().isEmpty()) {
+                    List<Object> itens = leilao.getItens();
+                    itens.stream().forEach(iten -> deleteItens(iten));
+                }
+                return true;
+            })
+        .orElseThrow(() -> new EntityNotFoundException(" Leilão não encontrado."));
         leilaoRepository.deleteById(id);
+    }
+
+    private void deleteItens(Object iten) {
+        switch (iten) {
+            case Imovel i  -> imovelService.deleteImovel(i.getId());
+            case Veiculo v -> veiculoService.deleteVeiculo(v.getId());
+            default        -> throw new IllegalStateException("Tipo não suportado");
+        };
     }
 
     public void criarLeilaoComItens(String descricao, List<Long> ids, String tipo) {

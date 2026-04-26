@@ -51,6 +51,7 @@ public class VeiculoServiceImpl implements VeiculoService{
     }
 
     @Override
+    @Transactional
     public void deleteVeiculo(Long id) {
         veiculoRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(" Veiculo não encontrado."));

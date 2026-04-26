@@ -63,6 +63,13 @@ public class EnderecoServiceImpl implements EnderecoService{
                                 novo.setCep(cep.getCep());
                                 return cepRepository.save(novo);
                             });
+        } else if (Optional.ofNullable(cep.getCep()).isPresent()) {
+            cep1 = cepRepository.findByCep(cep.getCep())
+                    .orElseGet(() -> {
+                        CEP novo = new CEP();
+                        novo.setCep(cep.getCep());
+                        return cepRepository.save(novo);
+            });
         } else {
             CEP novo = new CEP();
             novo.setCep(cep.getCep());
