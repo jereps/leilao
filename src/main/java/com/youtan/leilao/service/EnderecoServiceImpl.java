@@ -2,6 +2,7 @@ package com.youtan.leilao.service;
 
 import com.youtan.leilao.model.*;
 import com.youtan.leilao.repository.*;
+import jakarta.transaction.Transactional;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ public class EnderecoServiceImpl implements EnderecoService{
 
 
     @Override
+    @Transactional
     public Endereco validarEndereco(Endereco enderecoDTO) {
         CEP cep = validarCEP(enderecoDTO.getCep());
         Bairro bairro = validarBairro(enderecoDTO.getBairro());
@@ -28,6 +30,17 @@ public class EnderecoServiceImpl implements EnderecoService{
         Endereco endereco = new Endereco();
         if ( Optional.ofNullable(enderecoDTO.getId()).isPresent()){
             endereco = enderecoRepository.findById(enderecoDTO.getId())
+                    .map(end -> {
+                        end.setEstado(estado);
+                        end.setBairro(bairro);
+                        end.setCidade(cidade);
+                        end.setCep(cep);
+                        end.setRua(enderecoDTO.getRua());
+                        end.setNumero(enderecoDTO.getNumero());
+                        end.setComplemento(enderecoDTO.getComplemento());
+                        enderecoRepository.save(end);
+                        return end;
+                    })
                     .orElseGet(() -> {
                         Endereco novo = new Endereco();
                         novo.setBairro(bairro);
@@ -62,7 +75,8 @@ public class EnderecoServiceImpl implements EnderecoService{
                                 CEP novo = new CEP();
                                 novo.setCep(cep.getCep());
                                 return cepRepository.save(novo);
-                            });
+                            })
+                            ;
         } else if (Optional.ofNullable(cep.getCep()).isPresent()) {
             cep1 = cepRepository.findByCep(cep.getCep())
                     .orElseGet(() -> {

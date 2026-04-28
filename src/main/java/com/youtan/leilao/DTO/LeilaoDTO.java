@@ -13,8 +13,10 @@ public class LeilaoDTO {
     private Long id;
     private String nome;
     private LocalDateTime dataHorarioLeilao;
-    private Endereco enderecoLeilaoDTO;
+    private Endereco enderecoLeilaoDTO = new Endereco();
     private List<ItemLeilaoDTO> mercadoria = new ArrayList<ItemLeilaoDTO>();
     private TipoCategoria categoria;
     private String descricao;
+    private FinanceiraDTO financeiraDTO;
 }
+

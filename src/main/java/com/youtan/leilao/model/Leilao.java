@@ -47,4 +47,8 @@ public class Leilao {
     @Column(name = "descricao")
     private String descricao;
 
+    @ManyToOne
+    @JoinColumn(name = "financeiro_id")
+    private Financeira financeira;
+
 }

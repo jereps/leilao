@@ -13,7 +13,7 @@ public class Financeira {
     private Long id;
 
     @Column(length = 14, nullable = false)
-    private Long cnpj;
+    private String cnpj;
     @Column(length = 3, nullable = false)
     private Long codigoCompensacao;
     @Column(length = 200, nullable = false)

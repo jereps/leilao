@@ -31,7 +31,13 @@ public class LeilaoController {
     @GetMapping("/{id}")
     @PermitAll
     public ResponseEntity<LeilaoDTO> getLeilao(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(leilaoService.getLeilao(id));
+         return ResponseEntity.status(HttpStatus.OK).body(leilaoService.getLeilao(id));
+    }
+
+    @GetMapping("/itens/{id}")
+    @PermitAll
+    public ResponseEntity<List<ItemLeilaoDTO>> getLeilaoItens(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(leilaoService.getLeilaoItens(id));
     }
 
     @PostMapping

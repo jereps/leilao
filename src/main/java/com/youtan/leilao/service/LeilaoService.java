@@ -15,6 +15,8 @@ public interface LeilaoService {
 
     LeilaoDTO getLeilao(Long id);
 
+    List<ItemLeilaoDTO> getLeilaoItens(Long id);
+
     LeilaoDTO createLeilao(LeilaoDTO leilaoDTO);
 
     LeilaoDTO updateLeilao(Long id, LeilaoDTO leilaoDTO);
