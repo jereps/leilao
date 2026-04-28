@@ -11,5 +11,7 @@ export const routes: Routes = [
   { path: 'signup', component: SignupComponent },
   { path: 'leilao/new', component: LeilaoFormComponent, resolve: {leilao: leilaoResolver }},
   { path: 'leilao/edit/:id', loadComponent: () => import('./components/leilao-form/leilao-form.component').then(m => m.LeilaoFormComponent), resolve: {leilao: leilaoResolver}},
+  { path: 'leilao/veiculos/:id', loadComponent: () => import('./components/veiculo-list/veiculo-list.component').then(m => m.VeiculoListComponent) },
+  { path: 'leilao/imoveis/:id', loadComponent: () => import('./components/imovel-list/imovel-list.component').then(m => m.ImovelListComponent) }
 
 ];

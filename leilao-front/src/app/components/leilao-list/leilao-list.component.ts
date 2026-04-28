@@ -37,6 +37,7 @@ export class LeilaoListComponent {
   @Output() add = new EventEmitter(false);
   @Output() edit = new EventEmitter(false);
   @Output() remove = new EventEmitter(false);
+  @Output() iten = new EventEmitter(false);
 
   onAdd() {
     this.add.emit(true);
@@ -50,6 +51,6 @@ export class LeilaoListComponent {
   }
 
   clickedRows(leilao: LeilaoSubmit) {
-    console.log(leilao.id);
+    this.iten.emit(leilao);
   }
 }

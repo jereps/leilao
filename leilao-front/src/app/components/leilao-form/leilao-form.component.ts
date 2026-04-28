@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, effect, inject, input } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
@@ -13,6 +13,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ActivatedRoute } from '@angular/router';
 import { LeilaoSubmit } from '../../model/leilao-submit';
+import { NgxMaskDirective } from 'ngx-mask';
 
 @Component({
   selector: 'app-leilao-form',
@@ -26,6 +27,8 @@ import { LeilaoSubmit } from '../../model/leilao-submit';
     MatSnackBarModule,
     MatTimepickerModule,
     MatDatepickerModule,
+    NgxMaskDirective,
+
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './leilao-form.component.html',
@@ -58,30 +61,48 @@ export class LeilaoFormComponent {
       id: new Number(),
       nome: '',
       dataHorarioLeilao: new Date(),
+      categoria: '',
+      descricao: '',
       enderecoLeilaoDTO: this.formBuilder.group({
+        id: new Number(),
         numero: '',
         rua: '',
         cep: this.formBuilder.group({
+          id: new Number(),
           cep: '',
         }),
         bairro: this.formBuilder.group({
+          id: new Number(),
           nomeBairro: '',
         }),
         cidade: this.formBuilder.group({
+          id: new Number(),
           nome: '',
         }),
         estado: this.formBuilder.group({
+          id: new Number(),
           nome: '',
           sigla: '',
         }),
       }),
-      categoria: '',
-      descricao: '',
+      financeiraDTO: this.formBuilder.group({
+        id: new Number(),
+        cnpj: 0,
+        codigoCompensacao: 0,
+        razaoSocial: '',
+      }),
+
     });
 
   onSubmit() {
     this.service.save(this.form.getRawValue() as LeilaoSubmit).subscribe(
-      (result) => this.onSucsess(),
+      (result) =>{
+        let men: string = 'Criado';
+        if(this.form.getRawValue().id){
+          men = 'Atualizado';
+        };
+        this.onSucsess(men)
+      },
       (error) => this.onError(error),
     );
   }
@@ -89,8 +110,8 @@ export class LeilaoFormComponent {
     this.location.back();
   }
 
-  private onSucsess() {
-    this.snackBar.open('Leião Criado com sucesso!', 'Done', { duration: 5000 });
+  private onSucsess(men: string) {
+    this.snackBar.open(`Leião  ${men} com sucesso!`, 'Done', { duration: 5000 });
     this.onCancel();
   }
 
@@ -102,4 +123,5 @@ export class LeilaoFormComponent {
       { duration: 50000 },
     );
   }
+
 }

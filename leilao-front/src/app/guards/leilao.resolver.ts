@@ -8,7 +8,6 @@ export const leilaoResolver: ResolveFn<LeilaoSubmit> = (route, state) => {
   const leilaoService = inject(LeilaoService);
   const id = route.paramMap.get('id');
 
-
   if (id){
     return leilaoService.loadById(Number(id));
   }

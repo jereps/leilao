@@ -9,6 +9,7 @@ import { provideToastr } from 'ngx-toastr';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 import { authInterceptor } from './services/auth.interceptor';
+import { provideNgxMask } from 'ngx-mask';
 registerLocaleData(localePt);
 
 
@@ -20,7 +21,9 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch(),withInterceptors([authInterceptor])),
     { provide: LOCALE_ID, useValue: 'pt-BR' },
     provideRouter(
-      routes,withComponentInputBinding()
-    )
+      routes,
+      withComponentInputBinding()
+    ),
+    provideNgxMask()
   ]
 };

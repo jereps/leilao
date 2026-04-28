@@ -3,13 +3,13 @@
       <!-- Nome Column -->
       <ng-container matColumnDef="nome">
         <mat-header-cell  *matHeaderCellDef>Leilão</mat-header-cell>
-        <mat-cell  *matCellDef="let leilao">{{ leilao.nome }}</mat-cell>
+        <mat-cell (click)="clickedRows(leilao)"  *matCellDef="let leilao">{{ leilao.nome }}</mat-cell>
       </ng-container>
 
       <!-- dataHorarioLeilao Column -->
       <ng-container matColumnDef="DataHorario">
         <mat-header-cell  *matHeaderCellDef>Data Horario Leilao</mat-header-cell>
-        <mat-cell  *matCellDef="let leilao">
+        <mat-cell (click)="clickedRows(leilao)"  *matCellDef="let leilao">
           {{ leilao.dataHorarioLeilao | date:'dd/MM/yyyy HH:mm' }}
         </mat-cell>
       </ng-container>
@@ -17,7 +17,7 @@
       <!-- Categoria Column -->
       <ng-container matColumnDef="categoria">
         <mat-header-cell  *matHeaderCellDef>Categoria</mat-header-cell>
-        <mat-cell  *matCellDef="let leilao">{{ leilao.categoria }}</mat-cell>
+        <mat-cell (click)="clickedRows(leilao)" *matCellDef="let leilao">{{ leilao.categoria }}</mat-cell>
       </ng-container>
 
       <!-- descricao Column -->
@@ -45,5 +45,5 @@
       </ng-container>
 
       <mat-header-row  *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row (click)="clickedRows(row)"  *matRowDef="let row; columns: displayedColumns"></mat-row>
+      <mat-row   *matRowDef="let row; columns: displayedColumns"></mat-row>
     </mat-table>

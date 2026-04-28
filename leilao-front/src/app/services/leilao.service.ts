@@ -3,6 +3,7 @@ import { Leilao } from '../model/leilao';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { first, tap } from 'rxjs';
 import { LeilaoSubmit } from '../model/leilao-submit';
+import { Itens } from '../model/itens';
 
 @Injectable({
   providedIn: 'root',
@@ -12,11 +13,6 @@ export class LeilaoService {
 
   constructor(private httpClient: HttpClient) {}
 
-  private headers = new HttpHeaders({
-    'Content-Type': 'application/json',
-    Authorization: 'Bearer {{sessionStorage.getItem("auth-token")}}',
-  });
-
   lista() {
     return this.httpClient.get<Leilao[]>(this.API).pipe(
       first(),
@@ -24,8 +20,19 @@ export class LeilaoService {
     );
   }
 
+    listaItens() {
+    return this.httpClient.get<Itens[]>(this.API).pipe(
+      first(),
+      tap((l) => console.log(l)),
+    );
+  }
+
   loadById(id: number) {
     return this.httpClient.get<LeilaoSubmit>(`${this.API}/${id}`);
+  }
+
+    loadByIds(id: number) {
+    return this.httpClient.get<Leilao[]>(`${this.API}/itens/${id}`);
   }
 
   save(record: Partial<LeilaoSubmit>) {

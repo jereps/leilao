@@ -69,4 +69,14 @@ export class LeilaoComponent {
       { duration: 50000 },
     );
   }
+
+
+  onIten(leilao: LeilaoSubmit) {
+    if(leilao.categoria=='VEICULO'){
+      // console.log("VEICULO");
+      this.router.navigate(['veiculos', leilao.id],  { state: { leilao }, relativeTo: this.route });
+    } else{
+    this.router.navigate(['imoveis', leilao.id],  { state: { leilao }, relativeTo: this.route });
+    }
+  }
 }
