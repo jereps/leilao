@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -149,23 +150,32 @@ public class LeilaoServiceImpl implements LeilaoService {
     }
 
     @Transactional
-    public void addItensAoLeilao(Long leilaoId, List<ItemLeilaoDTO> novosItens, String tipo) {
+    public void addItensAoLeilao(Long leilaoId, ItemLeilaoDTO novosItens, String tipo) {
         Leilao leilao = leilaoRepository.findById(leilaoId)
                 .orElseThrow(() -> new EntityNotFoundException("Leilao não encontrado"));
 
         // Regra: Não permitir misturar Imóvel e Veículo na mesma lista
-        validarTipoUnico(leilao, novosItens);
+        validarTipoUnico(leilao, Arrays.asList(novosItens));
 
         if ("IMOVEL".equalsIgnoreCase(tipo)) {
-            for (ItemLeilaoDTO item : novosItens) {
+            if ( ((ImovelDTO) novosItens).id() != null ) {
                 // getReferenceById é mais performático aqui: não faz SELECT,
                 // apenas cria um proxy com o ID para salvar na tabela de ligação
-                Imovel imovel = imovelRepository.getReferenceById(((ImovelDTO) item).id());
+                Imovel imovel = imovelRepository.getReferenceById(( (ImovelDTO)novosItens).id()) ;
+                leilao.getItens().add(imovel);
+            } else {
+                Imovel imovel =  mapper.map(novosItens,Imovel.class);
+                imovel.setEndereco(enderecoService.validarEndereco(((ImovelDTO) novosItens).endereco()));
+                imovelRepository.save(imovel);
                 leilao.getItens().add(imovel);
             }
         } else if ("VEICULO".equalsIgnoreCase(tipo)) {
-            for (ItemLeilaoDTO item : novosItens) {
-                Veiculo veiculo = veiculoRepository.getReferenceById(((VeiculoDTO)item).id());
+            if ( ((VeiculoDTO) novosItens).id() != null ) {
+                Veiculo veiculo = veiculoRepository.getReferenceById(((VeiculoDTO) novosItens).id());
+                leilao.getItens().add(veiculo);
+            } else {
+                Veiculo veiculo =   mapper.map(novosItens,Veiculo.class);
+                veiculoRepository.save(veiculo);
                 leilao.getItens().add(veiculo);
             }
         }
@@ -191,8 +201,8 @@ public class LeilaoServiceImpl implements LeilaoService {
 
         // Se o leilão já tiver itens, verifica se o tipo é o mesmo
         if (!leilao.getItens().isEmpty()) {
-            var tipoExistente = leilao.getItens().get(0);
-            if (!(tipoExistente.equals(tipoNovo))) {
+            var tipoExistente = leilao.getItens().get(0).getClass();
+            if (!(tipoExistente.getSimpleName().equals(itensDTO.getClass().getSimpleName()))) {
                 throw new RuntimeException("Este leilão já possui itens do tipo "
                         + tipoExistente.getClass().getSimpleName() + ". Não é possível misturar.");
             }

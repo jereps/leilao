@@ -22,14 +22,15 @@ public class LeilaoController {
         this.leilaoService = leilaoService;
     }
 
+    @PreAuthorize("permitAll()")
     @GetMapping
     public ResponseEntity<List<LeilaoDTO>> listLeilao() {
 
         return ResponseEntity.status(HttpStatus.OK).body(leilaoService.findAll());
     }
 
-    @GetMapping("/{id}")
     @PermitAll
+    @GetMapping("/{id}")
     public ResponseEntity<LeilaoDTO> getLeilao(@PathVariable Long id) {
          return ResponseEntity.status(HttpStatus.OK).body(leilaoService.getLeilao(id));
     }
@@ -62,7 +63,7 @@ public class LeilaoController {
 
     @PostMapping("/{id}/{tipo}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity addItensLeilao(@PathVariable Long id, @PathVariable String tipo, @RequestBody  List<ItemLeilaoDTO> novosItens){
+    public ResponseEntity addItensLeilao(@PathVariable Long id, @PathVariable String tipo, @RequestBody  ItemLeilaoDTO novosItens){
         leilaoService.addItensAoLeilao(id,novosItens,tipo);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

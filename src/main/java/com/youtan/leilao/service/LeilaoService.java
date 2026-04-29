@@ -23,7 +23,7 @@ public interface LeilaoService {
 
     void deleteLeilao(Long id);
 
-    public void addItensAoLeilao(Long leilaoId, List<ItemLeilaoDTO> novosItens,String tipo);
+    public void addItensAoLeilao(Long leilaoId, ItemLeilaoDTO novosItens,String tipo);
 
     void novoLance(LanceDTO lance);
 
