@@ -1,0 +1,82 @@
+<mat-card>
+  <mat-card-content>
+    <div class="column-flex mat-elevation-z8">
+      <mat-table [dataSource]="itens()">
+        <!-- Nome Column -->
+        <ng-container matColumnDef="nome">
+          <mat-header-cell *matHeaderCellDef>nome</mat-header-cell>
+          <mat-cell (click)="clickedRows(iten)" *matCellDef="let iten">{{ iten.nome }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="metragem">
+          <mat-header-cell *matHeaderCellDef>metragem</mat-header-cell>
+          <mat-cell (click)="clickedRows(iten)" *matCellDef="let iten">
+            {{ iten.metragem }}
+          </mat-cell>
+        </ng-container>
+
+        <!-- Categoria Column -->
+        <ng-container matColumnDef="nQuartos">
+          <mat-header-cell *matHeaderCellDef>nQuartos</mat-header-cell>
+          <mat-cell (click)="clickedRows(iten)" *matCellDef="let iten">{{ iten.nQuartos }}</mat-cell>
+        </ng-container>
+
+        <!-- descricao Column -->
+        <ng-container matColumnDef="nBanheiros">
+          <mat-header-cell *matHeaderCellDef>nBanheiros</mat-header-cell>
+          <mat-cell (click)="clickedRows(iten)" *matCellDef="let iten">{{ iten.nBanheiros }}</mat-cell>
+        </ng-container>
+
+        <!-- descricao Column -->
+        <ng-container matColumnDef="tipoImovel">
+          <mat-header-cell *matHeaderCellDef>tipoImovel</mat-header-cell>
+          <mat-cell (click)="clickedRows(iten)" *matCellDef="let iten">{{
+            iten.tipoImovel
+          }}</mat-cell>
+        </ng-container>
+
+        <!-- descricao Column -->
+        <ng-container matColumnDef="preco">
+          <mat-header-cell *matHeaderCellDef>preco</mat-header-cell>
+          <mat-cell (click)="clickedRows(iten)" *matCellDef="let iten">{{ iten.preco }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef class="action-column-header">
+            <button matMiniFab color="accent" aria-label="Adicionar um Leilão">
+              <mat-icon (click)="onAdd()">add</mat-icon>
+            </button>
+          </mat-header-cell>
+
+          <mat-cell *matCellDef="let iten" class="action-column">
+            <button
+              matIconButton
+              (click)="onEdit(iten)"
+              color="primary"
+              aria-label="Editar Leilão"
+              class="btn btn1"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+
+            <button
+              matIconButton
+              (click)="onDelete(iten)"
+              color="warn"
+              aria-label="Deletar Leilão"
+              class="btn btn2"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row
+
+          *matRowDef="let row; columns: displayedColumns"
+        ></mat-row>
+      </mat-table>
+    </div>
+  </mat-card-content>
+</mat-card>

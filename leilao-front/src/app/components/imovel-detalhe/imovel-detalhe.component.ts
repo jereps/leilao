@@ -1,6 +1,6 @@
 import { Itens } from '../../model/itens';
 import { Component, inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
@@ -9,9 +9,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { LeilaoService } from '../../services/leilao.service';
 import { catchError, of } from 'rxjs';
 import { JsonPipe } from '@angular/common';
-import { ImovelService } from '../../services/imovel.service';
-import { ImovelSubmit } from '../../model/imovel-submit';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-imovel-list',
@@ -28,9 +25,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class ImovelListComponent {
 // private router = Inject(Router);
 private route = inject(ActivatedRoute);
-  private imovelService = inject(ImovelService);
-  private router = inject(Router);
-  private snackBar = inject(MatSnackBar);
+  private leilaoService = inject(LeilaoService);
 
    id = this.route.snapshot.paramMap.get('id');
 
@@ -46,10 +41,22 @@ private route = inject(ActivatedRoute);
     ];
 
 
+
+
   itens = toSignal(
-    this.imovelService.loadByIds(Number(this.id)).pipe(
+    this.leilaoService.loadByIds(Number(this.id)).pipe(
       catchError((error) => {
         console.log("itens-list");
+        console.log(error);
+        return of([]);
+      }),
+    ),
+    { initialValue: [] },
+  );
+
+    leiloes = toSignal(
+    this.leilaoService.lista().pipe(
+      catchError((error) => {
         console.log(error);
         return of([]);
       }),
@@ -64,46 +71,22 @@ private route = inject(ActivatedRoute);
   // @Output() iten = new EventEmitter(false);
 
   onAdd() {
-    this.router.navigate(['new'], { relativeTo: this.route });
+    // this.add.emit(true);
+    // this.leilao()?.dataHorarioLeilao
     console.log("add");
   }
-
-  onEdit(imovel: ImovelSubmit){
+  onEdit(leilao: Itens){
     // this.edit.emit(leilao);
-    console.log(imovel.id);
-    this.router.navigate(['edit',imovel.id], { relativeTo: this.route });
+    console.log(leilao.id);
   }
 
-  onDelete(imovel: ImovelSubmit) {
-    this.imovelService.remove(Number(imovel.id)).subscribe(
-      (result) => {
-        this.snackBar.open('Imovel removido com sucesso!', 'X', {
-          duration: 5000,
-          verticalPosition: 'top',
-          horizontalPosition: 'center',
-        });
-        this.refresh()
-      },
-      (error) => this.onError(error),
-    );
-    console.log(imovel.id);
+  onDelete(leilao: Itens) {
+    // this.remove.emit(leilao);
+    console.log(leilao.id);
   }
 
-  clickedRows(imovel: ImovelSubmit) {
+  clickedRows(leilao: Itens) {
     // this.iten.emit(leilao);
-    console.log(imovel.id);
-  }
-
-  refresh(){
-    window.location.reload();
-  }
-
-  private onError(error: { error: { mensagem: any; erros: any } }) {
-    this.snackBar.open(
-      ` ${error.error.mensagem}
-          ${error.error.erros}`,
-      'Done',
-      { duration: 50000 },
-    );
+    console.log(leilao.id);
   }
 }
