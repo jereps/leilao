@@ -1,0 +1,75 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Dados do Veiculo</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="form">
+      <mat-form-field class="full-width">
+        <mat-label>Marca Modelo</mat-label>
+        <input matInput placeholder="marcaModelo" formControlName="marcaModelo" />
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Tipo Veiculo</mat-label>
+        <mat-select formControlName="tipoVeiculo" placeholder="tipoVeiculo">
+          <mat-option value="MOTOCICLETA">MOTOCICLETA</mat-option>
+          <mat-option value="PASSEIO">PASSEIO</mat-option>
+          <mat-option value="VANS">VANS</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+
+      <mat-form-field class="full-width">
+        <mat-label>Tipo Combustivel</mat-label>
+        <mat-select formControlName="tipoCombustivel" placeholder="tipoCombustivel">
+          <mat-option value="FLEX">FLEX</mat-option>
+          <mat-option value="GASOLINA">GASOLINA</mat-option>
+          <mat-option value="DIESEL">DIESEL</mat-option>
+          <mat-option value="ELETRICO">ELETRICO</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="form-card2">
+        <mat-label>Valor</mat-label>
+        <input matInput placeholder="valor" formControlName="valor" />
+      </mat-form-field>
+
+      <mat-form-field class="form-card2">
+        <mat-label>Ano Fabricacao</mat-label>
+        <input matInput placeholder="anoFabricacao" formControlName="anoFabricacao" />
+      </mat-form-field>
+
+      <mat-form-field class="form-card2">
+        <mat-label>Cor</mat-label>
+        <input matInput placeholder="Cor" formControlName="Cor" />
+      </mat-form-field>
+
+      <mat-form-field class="form-card2">
+        <mat-label>Placa</mat-label>
+        <input matInput placeholder="placa" formControlName="placa" />
+      </mat-form-field>
+
+      <mat-form-field class="form-card2">
+        <mat-label>Numero Portas</mat-label>
+        <input matInput placeholder="nPortas" formControlName="nPortas" />
+      </mat-form-field>
+
+      <mat-form-field class="form-card2">
+        <mat-label>Max Passageiros</mat-label>
+        <input matInput placeholder="qtdPassageiros" formControlName="qtdPassageiros" />
+      </mat-form-field>
+
+
+    </form>
+
+
+
+  </mat-card-content>
+  <mat-card-actions>
+    <button matButton="elevated" color="primary" (click)="onSubmit()">
+      Salvar
+    </button>
+    <button matButton="elevated" color="" (click)="onCancel()">Cancelar</button>
+  </mat-card-actions>
+</mat-card>
+

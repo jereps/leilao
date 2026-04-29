@@ -15,20 +15,6 @@ export class ImovelService {
 
   constructor(private httpClient: HttpClient) {}
 
-  // lista() {
-  //   return this.httpClient.get<Leilao[]>(this.API).pipe(
-  //     first(),
-  //     tap((l) => console.log(l)),
-  //   );
-  // }
-
-  //   listaItens() {
-  //   return this.httpClient.get<Itens[]>(this.API).pipe(
-  //     first(),
-  //     tap((l) => console.log(l)),
-  //   );
-  // }
-
   loadById(id: number) {
     return this.httpClient.get<ImovelSubmit>(`${this.APIIM}/${id}`).pipe(
       first(),

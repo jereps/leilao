@@ -1,6 +1,6 @@
 import { Itens } from '../../model/itens';
 import { Component, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
@@ -9,6 +9,9 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { LeilaoService } from '../../services/leilao.service';
 import { catchError, of } from 'rxjs';
 import { JsonPipe } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { VeiculoSubmit } from '../../model/veiculo-submit';
+import { VeiculoService } from '../../services/veiculo.service';
 
 @Component({
   selector: 'app-veiculo-list',
@@ -17,7 +20,6 @@ import { JsonPipe } from '@angular/common';
     MatIconModule,
     MatCardModule,
     MatButtonModule,
-    JsonPipe
   ],
   templateUrl: './veiculo-list.component.html',
   styleUrl: './veiculo-list.component.scss',
@@ -25,7 +27,9 @@ import { JsonPipe } from '@angular/common';
 export class VeiculoListComponent {
 // private router = Inject(Router);
 private route = inject(ActivatedRoute);
-  private leilaoService = inject(LeilaoService);
+  private veiculoService = inject(VeiculoService);
+    private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
 
    id = this.route.snapshot.paramMap.get('id');
 
@@ -45,7 +49,7 @@ private route = inject(ActivatedRoute);
 
 
   itens = toSignal(
-    this.leilaoService.loadByIds(Number(this.id)).pipe(
+    this.veiculoService.loadByIds(Number(this.id)).pipe(
       catchError((error) => {
         console.log("itens-list");
         console.log(error);
@@ -55,39 +59,46 @@ private route = inject(ActivatedRoute);
     { initialValue: [] },
   );
 
-    leiloes = toSignal(
-    this.leilaoService.lista().pipe(
-      catchError((error) => {
-        console.log(error);
-        return of([]);
-      }),
-    ),
-    { initialValue: [] },
-  );
-
-  // @Input() leiloes: Leilao[] = [];
-  // @Output() add = new EventEmitter(false);
-  // @Output() edit = new EventEmitter(false);
-  // @Output() remove = new EventEmitter(false);
-  // @Output() iten = new EventEmitter(false);
-
   onAdd() {
-    // this.add.emit(true);
-    // this.leilao()?.dataHorarioLeilao
+    this.router.navigate(['new'], { relativeTo: this.route });
     console.log("add");
   }
-  onEdit(leilao: Itens){
-    // this.edit.emit(leilao);
-    console.log(leilao.id);
+
+  onEdit(veiculo: VeiculoSubmit){
+    console.log(veiculo.id);
+    this.router.navigate(['edit',veiculo.id], { relativeTo: this.route });
   }
 
-  onDelete(leilao: Itens) {
-    // this.remove.emit(leilao);
-    console.log(leilao.id);
+  onDelete(veiculo: VeiculoSubmit) {
+    this.veiculoService.remove(Number(veiculo.id)).subscribe(
+      (result) => {
+        this.snackBar.open('Veiculo removido com sucesso!', 'X', {
+          duration: 5000,
+          verticalPosition: 'top',
+          horizontalPosition: 'center',
+        });
+        this.refresh()
+      },
+      (error) => this.onError(error),
+    );
+    console.log(veiculo.id);
   }
 
-  clickedRows(leilao: Itens) {
+  clickedRows(veiculo: VeiculoSubmit) {
     // this.iten.emit(leilao);
-    console.log(leilao.id);
+    console.log(veiculo.id);
+  }
+
+    refresh(){
+    window.location.reload();
+  }
+
+  private onError(error: { error: { mensagem: any; erros: any } }) {
+    this.snackBar.open(
+      ` ${error.error.mensagem}
+          ${error.error.erros}`,
+      'Done',
+      { duration: 50000 },
+    );
   }
 }

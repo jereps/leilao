@@ -1,4 +1,3 @@
-import { Itens } from '../../model/itens';
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableModule } from '@angular/material/table';
@@ -6,9 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { LeilaoService } from '../../services/leilao.service';
 import { catchError, of } from 'rxjs';
-import { JsonPipe } from '@angular/common';
 import { ImovelService } from '../../services/imovel.service';
 import { ImovelSubmit } from '../../model/imovel-submit';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -20,13 +17,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatIconModule,
     MatCardModule,
     MatButtonModule,
-    JsonPipe
   ],
   templateUrl: './imovel-list.component.html',
   styleUrl: './imovel-list.component.scss',
 })
 export class ImovelListComponent {
-// private router = Inject(Router);
 private route = inject(ActivatedRoute);
   private imovelService = inject(ImovelService);
   private router = inject(Router);
@@ -57,19 +52,12 @@ private route = inject(ActivatedRoute);
     { initialValue: [] },
   );
 
-  // @Input() leiloes: Leilao[] = [];
-  // @Output() add = new EventEmitter(false);
-  // @Output() edit = new EventEmitter(false);
-  // @Output() remove = new EventEmitter(false);
-  // @Output() iten = new EventEmitter(false);
-
   onAdd() {
     this.router.navigate(['new'], { relativeTo: this.route });
     console.log("add");
   }
 
   onEdit(imovel: ImovelSubmit){
-    // this.edit.emit(leilao);
     console.log(imovel.id);
     this.router.navigate(['edit',imovel.id], { relativeTo: this.route });
   }

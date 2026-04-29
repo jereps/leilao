@@ -8,7 +8,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { LeilaoService } from '../../services/leilao.service';
 import { catchError, of } from 'rxjs';
-import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-imovel-list',
@@ -17,13 +16,11 @@ import { JsonPipe } from '@angular/common';
     MatIconModule,
     MatCardModule,
     MatButtonModule,
-    JsonPipe
   ],
-  templateUrl: './imovel-list.component.html',
-  styleUrl: './imovel-list.component.scss',
+  templateUrl: './imovel-detalhe.component.html',
+  styleUrl: './imovel-detalhe.component.scss',
 })
-export class ImovelListComponent {
-// private router = Inject(Router);
+export class ImovelDetalheComponent {
 private route = inject(ActivatedRoute);
   private leilaoService = inject(LeilaoService);
 
@@ -64,11 +61,6 @@ private route = inject(ActivatedRoute);
     { initialValue: [] },
   );
 
-  // @Input() leiloes: Leilao[] = [];
-  // @Output() add = new EventEmitter(false);
-  // @Output() edit = new EventEmitter(false);
-  // @Output() remove = new EventEmitter(false);
-  // @Output() iten = new EventEmitter(false);
 
   onAdd() {
     // this.add.emit(true);
