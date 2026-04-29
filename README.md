@@ -4,6 +4,7 @@ Este é um sistema de leilão, A aplicação gerencia leilões de itens polimór
 
 ## 🚀 Tecnologias Utilizadas
 
+- **Front-end**: Angular 21 e Node 24.
 - **Java 25**: Utilizando as versões mais recentes do ecossistema Java.
 - **Spring Boot 4**: Framework base para a construção da API.
 - **Maven 3.9.14**: Gerenciador de dependências e automação de build.
