@@ -19,5 +19,10 @@ public interface LeilaoRepository extends JpaRepository<Leilao,Long> {
     @Modifying
     @Transactional
     @Query(value = "DELETE FROM leilao_itens WHERE item_id = :itemId AND item_type = :type", nativeQuery = true)
-    void deleteItemReferenceFromJoinTable(Long itemId, String type);
+    void deleteImovelReferenceFromJoinTable(Long itemId, String type);
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM leilao_itens WHERE item_id = :itemId AND item_type = :type", nativeQuery = true)
+    void deleteVeiculoReferenceFromJoinTable(Long itemId, String type);
 }

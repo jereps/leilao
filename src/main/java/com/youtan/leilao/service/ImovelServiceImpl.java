@@ -65,7 +65,7 @@ public class ImovelServiceImpl implements ImovelService {
     public void deleteImovel(Long id) {
         repositoryImovel.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(" Imóvel não encontrado."));
-        leilaoRepository.deleteItemReferenceFromJoinTable(id, "IMOVEL");
+        leilaoRepository.deleteImovelReferenceFromJoinTable(id, "IMOVEL");
 
         repositoryImovel.deleteById(id);
     }
