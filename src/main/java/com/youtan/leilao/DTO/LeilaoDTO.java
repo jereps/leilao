@@ -5,6 +5,7 @@ import com.youtan.leilao.model.TipoCategoria;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -12,8 +13,10 @@ public class LeilaoDTO {
     private Long id;
     private String nome;
     private LocalDateTime dataHorarioLeilao;
-    private Endereco enderecoLeilaoDTO;
-    private List<ItemLeilaoDTO> mercadoria;
+    private Endereco enderecoLeilaoDTO = new Endereco();
+    private List<ItemLeilaoDTO> mercadoria = new ArrayList<ItemLeilaoDTO>();
     private TipoCategoria categoria;
     private String descricao;
+    private FinanceiraDTO financeiraDTO;
 }
+

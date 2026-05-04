@@ -1,0 +1,19 @@
+<mat-toolbar color="primary">
+  <span (click)="home()">Leilão</span>
+
+  <div class="container">
+    @if (!authService.isAuthenticated()) {
+      <button matIconButton (click)="onLogin()" color="$gray-bg" aria-label="Login" class="home">
+        <mat-icon aria-label="Login">login</mat-icon>
+      </button>
+    } @else {
+      <button matIconButton (click)="onLogout()" color="#000000" aria-label="Login" class="home">
+        <mat-icon aria-label="Logout">logout</mat-icon>
+      </button>
+    }
+
+  </div>
+
+
+</mat-toolbar>
+<router-outlet />

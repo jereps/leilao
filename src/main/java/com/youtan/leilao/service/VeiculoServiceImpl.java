@@ -2,6 +2,7 @@ package com.youtan.leilao.service;
 
 import com.youtan.leilao.DTO.VeiculoDTO;
 import com.youtan.leilao.model.Veiculo;
+import com.youtan.leilao.repository.LeilaoRepository;
 import com.youtan.leilao.repository.VeiculoRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 public class VeiculoServiceImpl implements VeiculoService{
 
     private final VeiculoRepository veiculoRepository;
+    private final LeilaoRepository leilaoRepository;
     private final ModelMapper mapper;
 
     @Override
@@ -47,13 +49,17 @@ public class VeiculoServiceImpl implements VeiculoService{
         veiculoRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(" Veiculo não encontrado."));
         Veiculo veiculo = mapper.map(veiculoDTO,Veiculo.class);
+        veiculoRepository.save(veiculo);
         return mapper.map(veiculo,VeiculoDTO.class);
     }
 
     @Override
+    @Transactional
     public void deleteVeiculo(Long id) {
         veiculoRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(" Veiculo não encontrado."));
+        leilaoRepository.deleteVeiculoReferenceFromJoinTable(id, "VEICULO");
+
         veiculoRepository.deleteById(id);
     }
 }

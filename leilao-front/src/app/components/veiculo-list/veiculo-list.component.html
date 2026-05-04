@@ -1,0 +1,96 @@
+<app-show-form></app-show-form>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Itens</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="column-flex mat-elevation-z8">
+      <mat-table [dataSource]="itens()">
+        <!-- Nome Column -->
+        <ng-container matColumnDef="cor">
+          <mat-header-cell *matHeaderCellDef>Cor</mat-header-cell>
+          <mat-cell (click)="clickedRows(iten)" *matCellDef="let iten">{{ iten.Cor }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="anoFabricacao">
+          <mat-header-cell *matHeaderCellDef>Ano Fabricação</mat-header-cell>
+          <mat-cell (click)="clickedRows(iten)" *matCellDef="let iten">
+            {{ iten.anoFabricacao }}
+          </mat-cell>
+        </ng-container>
+
+        <!-- Categoria Column -->
+        <ng-container matColumnDef="marcaModelo">
+          <mat-header-cell *matHeaderCellDef>Marca Modelo</mat-header-cell>
+          <mat-cell (click)="clickedRows(iten)" *matCellDef="let iten">{{ iten.marcaModelo }}</mat-cell>
+        </ng-container>
+
+        <!-- descricao Column -->
+        <ng-container matColumnDef="placa">
+          <mat-header-cell *matHeaderCellDef>Placa</mat-header-cell>
+          <mat-cell (click)="clickedRows(iten)" *matCellDef="let iten">{{ iten.placa }}</mat-cell>
+        </ng-container>
+
+        <!-- descricao Column -->
+        <ng-container matColumnDef="tipoCombustivel">
+          <mat-header-cell *matHeaderCellDef>Combustivel</mat-header-cell>
+          <mat-cell (click)="clickedRows(iten)" *matCellDef="let iten">{{
+            iten.tipoCombustivel
+          }}</mat-cell>
+        </ng-container>
+
+        <!-- descricao Column -->
+        <ng-container matColumnDef="tipoVeiculo">
+          <mat-header-cell *matHeaderCellDef>Veiculo</mat-header-cell>
+          <mat-cell (click)="clickedRows(iten)" *matCellDef="let iten">{{ iten.tipoVeiculo }}</mat-cell>
+        </ng-container>
+
+        <!-- descricao Column -->
+        <ng-container matColumnDef="valor">
+          <mat-header-cell *matHeaderCellDef>Valor</mat-header-cell>
+          <mat-cell (click)="clickedRows(iten)" *matCellDef="let iten">{{ iten.valor }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef class="action-column-header">
+          @if (loginService.userRoles().includes('ROLE_ADMIN')) {
+              <button matMiniFab color="accent" aria-label="Adicionar um Leilão">
+                <mat-icon (click)="onAdd()">add</mat-icon>
+              </button>
+          }
+          </mat-header-cell>
+
+          <mat-cell *matCellDef="let iten" class="action-column">
+          @if (loginService.userRoles().includes('ROLE_ADMIN')) {
+              <button
+                matIconButton
+                (click)="onEdit(iten)"
+                color="primary"
+                aria-label="Editar Leilão"
+                class="btn btn1"
+              >
+                <mat-icon>edit</mat-icon>
+              </button>
+
+              <button
+                matIconButton
+                (click)="onDelete(iten)"
+                color="warn"
+                aria-label="Deletar Leilão"
+                class="btn btn2"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            }
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row
+
+          *matRowDef="let row; columns: displayedColumns"
+        ></mat-row>
+      </mat-table>
+    </div>
+  </mat-card-content>
+</mat-card>

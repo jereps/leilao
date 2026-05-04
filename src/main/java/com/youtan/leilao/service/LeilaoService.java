@@ -15,13 +15,15 @@ public interface LeilaoService {
 
     LeilaoDTO getLeilao(Long id);
 
+    List<ItemLeilaoDTO> getLeilaoItens(Long id);
+
     LeilaoDTO createLeilao(LeilaoDTO leilaoDTO);
 
     LeilaoDTO updateLeilao(Long id, LeilaoDTO leilaoDTO);
 
     void deleteLeilao(Long id);
 
-    public void addItensAoLeilao(Long leilaoId, List<ItemLeilaoDTO> novosItens,String tipo);
+    public void addItensAoLeilao(Long leilaoId, ItemLeilaoDTO novosItens,String tipo);
 
     void novoLance(LanceDTO lance);
 

@@ -2,7 +2,7 @@ package com.youtan.leilao.DTO;
 
 public record FinanceiraDTO(
     Long id,
-    Long cnpj,
+    String cnpj,
     Long codigoCompensacao,
     String razaoSocial
 ){}

@@ -12,8 +12,8 @@ public record VeiculoDTO (
     String marcaModelo,
     Integer anoFabricacao,
     String Cor,
-    TipoCombustivel tipoCombustível,
-    TipoVeículo tipoVeículo,
+    TipoCombustivel tipoCombustivel,
+    TipoVeículo tipoVeiculo,
     Integer nPortas,
     Integer qtdPassageiros,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "#,##0.00",locale = "pt-BR")

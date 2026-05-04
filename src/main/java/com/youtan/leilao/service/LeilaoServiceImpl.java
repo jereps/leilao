@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -26,6 +27,9 @@ public class LeilaoServiceImpl implements LeilaoService {
     private final LanceHistoricoRepository lanceHistoricoRepository;
     private final UserRepository userRepository;
     private final ModelMapper mapper;
+    private final VeiculoService veiculoService;
+    private final ImovelService imovelService;
+    private final FinanceiraService financeiraService;
 
 
     @Override
@@ -43,16 +47,32 @@ public class LeilaoServiceImpl implements LeilaoService {
     }
 
     @Override
+    public List<ItemLeilaoDTO> getLeilaoItens(Long id) {
+        return leilaoRepository.findById(id)
+                .map(leilao -> converterParaDTO(leilao))
+                .get().getMercadoria();
+//                .orElseThrow(() -> new EntityNotFoundException(" Leilão não encontrado"));
+    }
+
+    @Override
     @Transactional
     public LeilaoDTO createLeilao(LeilaoDTO leilaoDTO) {
         Leilao leilao = mapper.map(leilaoDTO,Leilao.class);
         leilao.setItens(new ArrayList<>());
-        leilao.setEnderecoLeilao(enderecoService.validarEndereco(leilaoDTO.getEnderecoLeilaoDTO()));
-        validarTipoUnico(leilao,leilaoDTO.getMercadoria());
 
+        if (leilaoDTO.getEnderecoLeilaoDTO() != null ) {
+            leilao.setEnderecoLeilao(enderecoService.validarEndereco(leilaoDTO.getEnderecoLeilaoDTO()));
+        }
 
-        converterItensLeilao(leilao,leilaoDTO);
-//        leilao.getItens().addAll(leilaoDTO.getItensDTO());
+        if (leilaoDTO.getFinanceiraDTO() != null ) {
+            leilao.setFinanceira(financeiraService.validarFinanceira(leilaoDTO.getFinanceiraDTO()));
+        }
+
+        if (!(leilaoDTO.getMercadoria() == null) && !leilaoDTO.getMercadoria().isEmpty()) {
+            validarTipoUnico(leilao,leilaoDTO.getMercadoria());
+            converterItensLeilao(leilao,leilaoDTO);
+        }
+
         leilaoRepository.save(leilao);
 
         return converterParaDTO(leilao);
@@ -64,21 +84,49 @@ public class LeilaoServiceImpl implements LeilaoService {
         leilaoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(" Leilão não encontrado."));
         Leilao leilao = mapper.map(leilaoDTO,Leilao.class);
-        leilao.setEnderecoLeilao(enderecoService.validarEndereco(leilaoDTO.getEnderecoLeilaoDTO()));
-        validarTipoUnico(leilao,leilaoDTO.getMercadoria());
-        leilao.getItens().addAll(leilaoDTO.getMercadoria());
+
+        if (leilaoDTO.getEnderecoLeilaoDTO() != null ) {
+            leilao.setEnderecoLeilao(enderecoService.validarEndereco(leilaoDTO.getEnderecoLeilaoDTO()));
+        }
+
+        if (leilaoDTO.getFinanceiraDTO() != null ) {
+            leilao.setFinanceira(financeiraService.validarFinanceira(leilaoDTO.getFinanceiraDTO()));
+        }
+
+        if (leilaoDTO.getMercadoria() != null && !leilaoDTO.getMercadoria().isEmpty()) {
+            validarTipoUnico(leilao,leilaoDTO.getMercadoria());
+            leilao.getItens().addAll(leilaoDTO.getMercadoria());
+        }
+
         leilaoRepository.save(leilao);
 
         return converterParaDTO(leilao);
     }
 
     @Override
+    @Transactional
     public void deleteLeilao(Long id) {
         leilaoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(" Leilão não encontrado."));
+                .map(leilao -> {
+                if ( leilao.getItens() != null && !leilao.getItens().isEmpty()) {
+                    List<Object> itens = leilao.getItens();
+                    itens.stream().forEach(iten -> deleteItens(iten));
+                }
+                return true;
+            })
+        .orElseThrow(() -> new EntityNotFoundException(" Leilão não encontrado."));
         leilaoRepository.deleteById(id);
     }
 
+    private void deleteItens(Object iten) {
+        switch (iten) {
+            case Imovel i  -> imovelService.deleteImovel(i.getId());
+            case Veiculo v -> veiculoService.deleteVeiculo(v.getId());
+            default        -> throw new IllegalStateException("Tipo não suportado");
+        };
+    }
+
+    @Transactional
     public void criarLeilaoComItens(String descricao, List<Long> ids, String tipo) {
         Leilao leilao = new Leilao();
         leilao.setDescricao(descricao);
@@ -101,23 +149,33 @@ public class LeilaoServiceImpl implements LeilaoService {
         leilaoRepository.save(leilao);
     }
 
-    public void addItensAoLeilao(Long leilaoId, List<ItemLeilaoDTO> novosItens, String tipo) {
+    @Transactional
+    public void addItensAoLeilao(Long leilaoId, ItemLeilaoDTO novosItens, String tipo) {
         Leilao leilao = leilaoRepository.findById(leilaoId)
                 .orElseThrow(() -> new EntityNotFoundException("Leilao não encontrado"));
 
         // Regra: Não permitir misturar Imóvel e Veículo na mesma lista
-        validarTipoUnico(leilao, novosItens);
+        validarTipoUnico(leilao, Arrays.asList(novosItens));
 
         if ("IMOVEL".equalsIgnoreCase(tipo)) {
-            for (ItemLeilaoDTO item : novosItens) {
+            if ( ((ImovelDTO) novosItens).id() != null ) {
                 // getReferenceById é mais performático aqui: não faz SELECT,
                 // apenas cria um proxy com o ID para salvar na tabela de ligação
-                Imovel imovel = imovelRepository.getReferenceById(((ImovelDTO) item).id());
+                Imovel imovel = imovelRepository.getReferenceById(( (ImovelDTO)novosItens).id()) ;
+                leilao.getItens().add(imovel);
+            } else {
+                Imovel imovel =  mapper.map(novosItens,Imovel.class);
+                imovel.setEndereco(enderecoService.validarEndereco(((ImovelDTO) novosItens).endereco()));
+                imovelRepository.save(imovel);
                 leilao.getItens().add(imovel);
             }
         } else if ("VEICULO".equalsIgnoreCase(tipo)) {
-            for (ItemLeilaoDTO item : novosItens) {
-                Veiculo veiculo = veiculoRepository.getReferenceById(((VeiculoDTO)item).id());
+            if ( ((VeiculoDTO) novosItens).id() != null ) {
+                Veiculo veiculo = veiculoRepository.getReferenceById(((VeiculoDTO) novosItens).id());
+                leilao.getItens().add(veiculo);
+            } else {
+                Veiculo veiculo =   mapper.map(novosItens,Veiculo.class);
+                veiculoRepository.save(veiculo);
                 leilao.getItens().add(veiculo);
             }
         }
@@ -127,7 +185,7 @@ public class LeilaoServiceImpl implements LeilaoService {
 
 
     private void validarTipoUnico(Leilao leilao, List<ItemLeilaoDTO> novosItens) {
-        if (novosItens.isEmpty()) return;
+        if (novosItens == null || novosItens.isEmpty()  ) return;
 
 
         // Pega o tipo do primeiro item da nova lista
@@ -143,8 +201,8 @@ public class LeilaoServiceImpl implements LeilaoService {
 
         // Se o leilão já tiver itens, verifica se o tipo é o mesmo
         if (!leilao.getItens().isEmpty()) {
-            var tipoExistente = leilao.getItens().get(0);
-            if (!(tipoExistente.equals(tipoNovo))) {
+            var tipoExistente = leilao.getItens().get(0).getClass();
+            if (!(tipoExistente.getSimpleName().equals(itensDTO.getClass().getSimpleName()))) {
                 throw new RuntimeException("Este leilão já possui itens do tipo "
                         + tipoExistente.getClass().getSimpleName() + ". Não é possível misturar.");
             }
@@ -169,21 +227,29 @@ public class LeilaoServiceImpl implements LeilaoService {
 
         dto.setEnderecoLeilaoDTO(leilao.getEnderecoLeilao());
         dto.getMercadoria().addAll(itensDTO);
+
+        if (leilao.getFinanceira() != null) {
+            dto.setFinanceiraDTO(mapper.map(leilao.getFinanceira(), FinanceiraDTO.class));
+        }
+
         return dto;
     }
 
+    @Transactional
     public void  converterItensLeilao(Leilao leilao, LeilaoDTO leilaoDTO){
         if (leilaoDTO.getMercadoria().get(0) instanceof ImovelDTO) {
             for (ItemLeilaoDTO item : leilaoDTO.getMercadoria()) {
                 // getReferenceById é mais performático aqui: não faz SELECT,
                 // apenas cria um proxy com o ID para salvar na tabela de ligação
                 Imovel imovel = mapper.map(item,Imovel.class);
-                leilao.getItens().add(imovel);
+                imovel.setEndereco(enderecoService.validarEndereco(((ImovelDTO) item).endereco()));
+
+                leilao.getItens().add(imovelRepository.save(imovel));
             }
-        } else if (leilaoDTO.getMercadoria().get(0).equals(VeiculoDTO.class)) {
+        } else if (leilaoDTO.getMercadoria().get(0) instanceof VeiculoDTO) {
             for (ItemLeilaoDTO item : leilaoDTO.getMercadoria()) {
                 Veiculo veiculo = mapper.map(item,Veiculo.class);
-                leilao.getItens().add(veiculo);
+                leilao.getItens().add(veiculoRepository.save(veiculo));
             }
         }
     }

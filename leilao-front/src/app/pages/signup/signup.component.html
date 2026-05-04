@@ -1,0 +1,56 @@
+<app-default-login-layout
+  title="Faça login e comece hoje mesmo!"
+  primaryBtnText="Signup Now"
+  secondaryBtnText="Login Now"
+  (submit)="submit()"
+  (navigate)="navigate()"
+  [disablePrimaryBtn]="!signupForm.valid"
+>
+  <form [formGroup]="signupForm">
+    <app-primary-input
+      formControlName="name"
+      inputName="name"
+      type="text"
+      label="Seu nome"
+      placeholder="Seu Nome"
+    >
+
+    </app-primary-input>
+    <app-primary-input
+      formControlName="email"
+      inputName="email"
+      type="email"
+      label="Email"
+      placeholder="seuemil@gmail.com"
+    >
+    </app-primary-input>
+
+    <app-primary-input
+      formControlName="password"
+      inputName="password"
+      type="password"
+      label="Sua Senha"
+
+    >
+    </app-primary-input>
+
+    <app-primary-input
+      formControlName="passwordConfirm"
+      inputName="passwordConfirm"
+      type="password"
+      label="Confirme Sua Senha"
+
+    >
+    </app-primary-input>
+
+    <!-- <app-primary-input
+      formControlName="role"
+      inputName="role"
+      type="text"
+      label="Role"
+
+    >
+    </app-primary-input> -->
+
+  </form>
+</app-default-login-layout>

@@ -1,0 +1,118 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Dados do Imovel</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="form">
+      <mat-form-field class="full-width">
+        <mat-label>Nome</mat-label>
+        <input matInput placeholder="Nome" formControlName="nome" />
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Tipo de Imovel</mat-label>
+        <mat-select formControlName="tipoImovel" placeholder="tipoImovel">
+          <mat-option value="RESIDENCIAL">RESIDENCIAL</mat-option>
+          <mat-option value="COMERCIAL">COMERCIAL</mat-option>
+          <mat-option value="RURAL">RURAL</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Valor</mat-label>
+        <input matInput placeholder="preco" formControlName="preco" />
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Metragem</mat-label>
+        <input matInput placeholder="metragem" formControlName="metragem" />
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Número de Quartos</mat-label>
+        <input matInput placeholder="nQuartos" formControlName="nQuartos" />
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Número de Banheiros</mat-label>
+        <input matInput placeholder="nBanheiros" formControlName="nBanheiros" />
+      </mat-form-field>
+
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>Endereço</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <!-- Grupo aninhado -->
+          <div formGroupName="endereco">
+
+            <mat-form-field class="form-card">
+              <mat-label>Logradouro</mat-label>
+              <input matInput placeholder="Rua" formControlName="rua" />
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Número</mat-label>
+              <input matInput placeholder="Numero" formControlName="numero" />
+            </mat-form-field>
+
+            <div formGroupName="cep">
+              <mat-form-field class="form-card2">
+                <mat-label>CEP</mat-label>
+                <input matInput placeholder="CEP" mask="00000-000" formControlName="cep" />
+              </mat-form-field>
+            </div>
+
+            <div formGroupName="bairro">
+              <mat-form-field class="form-card2">
+                <mat-label>Nome do Bairro</mat-label>
+                <input
+                  matInput
+                  placeholder="Nome Bairro"
+                  formControlName="nomeBairro"
+                />
+              </mat-form-field>
+            </div>
+
+            <div formGroupName="cidade">
+              <mat-form-field class="form-card2">
+                <mat-label>Nome da Cidade</mat-label>
+                <input
+                  matInput
+                  placeholder="Cidade Nome"
+                  formControlName="nome"
+                />
+              </mat-form-field>
+            </div>
+
+            <div formGroupName="estado">
+              <mat-form-field class="form-card">
+                <mat-label>Nome do Estado</mat-label>
+                <input
+                  matInput
+                  placeholder="Estado Nome"
+                  formControlName="nome"
+                />
+              </mat-form-field>
+
+              <mat-form-field>
+                <mat-label>Sigla do Estado</mat-label>
+                <input
+                  matInput
+                  placeholder="Estado Sigla"
+                  formControlName="sigla"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </form>
+  </mat-card-content>
+    <mat-card-actions>
+    <button matButton="elevated" color="primary" (click)="onSubmit()">
+      Voltar
+    </button>
+  </mat-card-actions>
+</mat-card>
+

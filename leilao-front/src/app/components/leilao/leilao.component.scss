@@ -1,0 +1,17 @@
+mat-card {
+  max-width: 90%;
+  margin: 2em auto;
+  text-align: center;
+}
+
+.column-flex{
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+
+  .meu-botao {
+    margin-left: auto;
+  }
+}
+
+

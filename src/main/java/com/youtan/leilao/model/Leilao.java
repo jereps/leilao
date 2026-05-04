@@ -7,6 +7,7 @@ import org.hibernate.annotations.AnyKeyJavaClass;
 import org.hibernate.annotations.ManyToAny;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -28,7 +29,7 @@ public class Leilao {
     @JoinColumn(name = "endereco_id")
     private Endereco enderecoLeilao;
 
-    @ManyToAny
+    @ManyToAny()
     @Column(name = "item_type")
     @AnyKeyJavaClass(Long.class)
     @AnyDiscriminatorValue(discriminator = "IMOVEL", entity = Imovel.class)
@@ -37,7 +38,7 @@ public class Leilao {
             name = "leilao_itens",
             joinColumns = @JoinColumn(name = "leilao_id"),
             inverseJoinColumns = @JoinColumn(name = "item_id"))
-    private List<Object> itens;
+    private List<Object> itens =  new ArrayList<>();
 
     @Column(length = 10, nullable = false)
     @Enumerated(EnumType.STRING)
@@ -45,5 +46,9 @@ public class Leilao {
 
     @Column(name = "descricao")
     private String descricao;
+
+    @ManyToOne
+    @JoinColumn(name = "financeiro_id")
+    private Financeira financeira;
 
 }

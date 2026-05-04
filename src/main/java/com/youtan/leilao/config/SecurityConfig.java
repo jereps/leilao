@@ -45,6 +45,7 @@ public class SecurityConfig {
                                 "/h2-console/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/leilao").permitAll()
                         .requestMatchers(HttpMethod.GET, "/leilao/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/leilao/itens/**").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

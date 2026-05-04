@@ -1,0 +1,26 @@
+<mat-card>
+  <mat-card-content>
+    <div class="column-flex mat-elevation-z8">
+      @if (leiloes().length > 0) {
+        <app-leilao-list
+          [leiloes]="leiloes()"
+          (add)="onAdd()"
+          (edit)="onEdit($event)"
+          (remove)="onRemove($event)"
+          (iten)="onIten($event)"
+        ></app-leilao-list>
+      } @else {
+        <button
+          matMiniFab
+          color="accent"
+          aria-label="Adicionar um Leilão"
+          class="meu-botao"
+        >
+          <mat-icon (click)="onAdd()">add</mat-icon>
+        </button>
+
+        <h2>Nenhum leilão encontrado...</h2>
+      }
+    </div>
+  </mat-card-content>
+</mat-card>
