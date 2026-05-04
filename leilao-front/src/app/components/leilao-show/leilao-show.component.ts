@@ -1,25 +1,26 @@
+import { appConfig } from '../../app.config';
 import { ChangeDetectionStrategy, Component, effect, inject, input } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
+// import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { LeilaoService } from '../../services/leilao.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Location } from '@angular/common';
 import { MatTimepickerModule } from '@angular/material/timepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ActivatedRoute } from '@angular/router';
-import { NgxMaskDirective } from 'ngx-mask';
-import { VeiculoService } from '../../services/veiculo.service';
-import { VeiculoSubmit } from '../../model/veiculo-submit';
+import { LeilaoSubmit } from '../../model/leilao-submit';
+// import { NgxMaskDirective } from 'ngx-mask';
 
 @Component({
-  selector: 'app-veiculo-form',
+  selector: 'app-show-form',
   imports: [
     ReactiveFormsModule,
-    MatFormFieldModule,
+    // MatFormFieldModule,
     MatInputModule,
     MatCardModule,
     MatSelectModule,
@@ -27,27 +28,30 @@ import { VeiculoSubmit } from '../../model/veiculo-submit';
     MatSnackBarModule,
     MatTimepickerModule,
     MatDatepickerModule,
+    // NgxMaskDirective,
 
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './veiculo-form.component.html',
-  styleUrl: './veiculo-form.component.scss',
+  templateUrl: './leilao-show.component.html',
+  styleUrl: './leilao-show.component.scss',
   providers: [provideNativeDateAdapter()],
 })
-export class VeiculoFormComponent {
+export class LeilaoShowComponent {
   private route = inject(ActivatedRoute);
   private location = inject(Location);
   private snackBar = inject(MatSnackBar);
-  private service = inject(VeiculoService);
+  private service = inject(LeilaoService);
   private formBuilder = inject(FormBuilder);
 
-  id = this.route.snapshot.paramMap.get('id');
 
-    veiculo = input<VeiculoSubmit>();
+  // form: FormGroup;
 
+    leilao = input<LeilaoSubmit>();
+
+    // const leilao: LeilaoSubmit = this.route.snapshot.data['leilao'];
 
     private dataFiller = effect(() => {
-      const data = this.veiculo();
+      const data = this.leilao();
       if (data) {
         console.log(data);
         this.form.patchValue(data);
@@ -55,40 +59,55 @@ export class VeiculoFormComponent {
     });
 
     form = this.formBuilder.nonNullable.group({
-        id: undefined,
-        placa: '',
-        marcaModelo: '',
-        anoFabricacao: '',
-        Cor: '',
-        tipoCombustivel: '',
-        tipoVeiculo: '',
-        valor: '',
-        nPortas: '0',
-        qtdPassageiros: '2',
-        tipo: 'VEICULO',
+      id: new Number(),
+      nome: '',
+      dataHorarioLeilao: new Date(),
+      categoria: '',
+      descricao: '',
+      enderecoLeilaoDTO: this.formBuilder.group({
+        id: new Number(),
+        numero: '',
+        rua: '',
+        cep: this.formBuilder.group({
+          id: new Number(),
+          cep: '',
+        }),
+        bairro: this.formBuilder.group({
+          id: new Number(),
+          nomeBairro: '',
+        }),
+        cidade: this.formBuilder.group({
+          id: new Number(),
+          nome: '',
+        }),
+        estado: this.formBuilder.group({
+          id: new Number(),
+          nome: '',
+          sigla: '',
+        }),
+      }),
+      financeiraDTO: this.formBuilder.group({
+        id: new Number(),
+        cnpj: 0,
+        codigoCompensacao: 0,
+        razaoSocial: '',
+      }),
 
     });
 
-  onSubmit() {
-    console.log("id"+this.id)
-    this.service.save(this.form.getRawValue() as VeiculoSubmit,Number(this.id)).subscribe(
-      (result) =>{
-        let men: string = 'Criado';
-        if(this.form.getRawValue().id){
-          men = 'Atualizado';
-        };
-        this.onSucsess(men)
-      },
-      (error) => this.onError(error),
-    );
-  }
+    constructor(){
+      this.form.disable();
+    }
 
+  onSubmit() {
+    this.location.back();
+  }
   onCancel() {
     this.location.back();
   }
 
   private onSucsess(men: string) {
-    this.snackBar.open(`Veiculo  ${men} com sucesso!`, 'Done', { duration: 5000 });
+    this.snackBar.open(`Leião  ${men} com sucesso!`, 'Done', { duration: 5000 });
     this.onCancel();
   }
 

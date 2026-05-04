@@ -1,7 +1,8 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, computed, signal } from '@angular/core';
 import { LoginResponse } from '../types/login-response.type';
 import { catchError, tap, throwError } from 'rxjs';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -9,8 +10,22 @@ import { catchError, tap, throwError } from 'rxjs';
 export class LoginService {
 
   apiUrl: string = "http://localhost:8080/auth/"
+  readonly token = signal<string | null>(sessionStorage.getItem('auth-token'));
+  readonly isAuthenticated = computed(() => !!this.token());
 
   constructor(private httpClient: HttpClient) {}
+
+  readonly userRoles = computed(() => {
+    const token = this.token();
+    if (!token) return [];
+    try {
+      const decoded: any = jwtDecode(token);
+      console.log("Roles: " + decoded.roles);
+      return decoded.roles || []; // O backend deve enviar as roles no payload
+    } catch {
+      return [];
+    }
+  });
 
   login(email: string, password: string) {
       return this.httpClient.post<LoginResponse>(this.apiUrl+"login", {email, password}).pipe(
@@ -19,6 +34,11 @@ export class LoginService {
           sessionStorage.setItem("username",value.nome)
         })
       )
+  }
+
+  logout() {
+    sessionStorage.removeItem('auth-token');
+    this.token.set(null);
   }
 
     signup(nome: string, email: string, password: string, role: string) {

@@ -22,6 +22,8 @@ export class LeilaoComponent {
   private leilaoService = inject(LeilaoService);
   private snackBar = inject(MatSnackBar);
 
+
+
   leiloes = toSignal(
     this.leilaoService.lista().pipe(
       catchError((error) => {

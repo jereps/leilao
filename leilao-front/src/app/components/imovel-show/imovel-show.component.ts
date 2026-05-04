@@ -12,11 +12,11 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ActivatedRoute } from '@angular/router';
 import { NgxMaskDirective } from 'ngx-mask';
-import { VeiculoService } from '../../services/veiculo.service';
-import { VeiculoSubmit } from '../../model/veiculo-submit';
+import { ImovelService } from '../../services/imovel.service';
+import { ImovelSubmit } from '../../model/imovel-submit';
 
 @Component({
-  selector: 'app-veiculo-form',
+  selector: 'app-show-form',
   imports: [
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -27,27 +27,28 @@ import { VeiculoSubmit } from '../../model/veiculo-submit';
     MatSnackBarModule,
     MatTimepickerModule,
     MatDatepickerModule,
+    NgxMaskDirective,
 
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './veiculo-form.component.html',
-  styleUrl: './veiculo-form.component.scss',
+  templateUrl: './imovel-show.component.html',
+  styleUrl: './imovel-show.component.scss',
   providers: [provideNativeDateAdapter()],
 })
-export class VeiculoFormComponent {
+export class ImovelShowComponent {
   private route = inject(ActivatedRoute);
   private location = inject(Location);
   private snackBar = inject(MatSnackBar);
-  private service = inject(VeiculoService);
+  private service = inject(ImovelService);
   private formBuilder = inject(FormBuilder);
 
   id = this.route.snapshot.paramMap.get('id');
 
-    veiculo = input<VeiculoSubmit>();
+    imovel = input<ImovelSubmit>();
 
 
     private dataFiller = effect(() => {
-      const data = this.veiculo();
+      const data = this.imovel();
       if (data) {
         console.log(data);
         this.form.patchValue(data);
@@ -55,32 +56,45 @@ export class VeiculoFormComponent {
     });
 
     form = this.formBuilder.nonNullable.group({
+      id: undefined,
+      nome: '',
+      tipoImovel: '',
+      preco: '',
+      endereco: this.formBuilder.group({
         id: undefined,
-        placa: '',
-        marcaModelo: '',
-        anoFabricacao: '',
-        Cor: '',
-        tipoCombustivel: '',
-        tipoVeiculo: '',
-        valor: '',
-        nPortas: '0',
-        qtdPassageiros: '2',
-        tipo: 'VEICULO',
+        numero: '',
+        rua: '',
+        cep: this.formBuilder.group({
+          id: undefined,
+          cep: '',
+        }),
+        bairro: this.formBuilder.group({
+          id: undefined,
+          nomeBairro: '',
+        }),
+        cidade: this.formBuilder.group({
+          id: undefined,
+          nome: '',
+        }),
+        estado: this.formBuilder.group({
+          id: undefined,
+          nome: '',
+          sigla: '',
+        }),
+      }),
+      metragem: '',
+      nQuartos: '',
+      nBanheiros: '',
+      tipo: 'IMOVEL'
 
     });
 
+  constructor(){
+      this.form.disable();
+  }
+
   onSubmit() {
-    console.log("id"+this.id)
-    this.service.save(this.form.getRawValue() as VeiculoSubmit,Number(this.id)).subscribe(
-      (result) =>{
-        let men: string = 'Criado';
-        if(this.form.getRawValue().id){
-          men = 'Atualizado';
-        };
-        this.onSucsess(men)
-      },
-      (error) => this.onError(error),
-    );
+    this.onCancel();
   }
 
   onCancel() {
@@ -88,7 +102,7 @@ export class VeiculoFormComponent {
   }
 
   private onSucsess(men: string) {
-    this.snackBar.open(`Veiculo  ${men} com sucesso!`, 'Done', { duration: 5000 });
+    this.snackBar.open(`Imovel  ${men} com sucesso!`, 'Done', { duration: 5000 });
     this.onCancel();
   }
 

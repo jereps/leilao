@@ -2,9 +2,16 @@
   <span (click)="home()">Leilão</span>
 
   <div class="container">
-    <button matIconButton (click)="onLogin()" color="$gray-bg" aria-label="Login" class="home">
-      <mat-icon aria-label="Login">login</mat-icon>
-    </button>
+    @if (!authService.isAuthenticated()) {
+      <button matIconButton (click)="onLogin()" color="$gray-bg" aria-label="Login" class="home">
+        <mat-icon aria-label="Login">login</mat-icon>
+      </button>
+    } @else {
+      <button matIconButton (click)="onLogout()" color="#000000" aria-label="Login" class="home">
+        <mat-icon aria-label="Logout">logout</mat-icon>
+      </button>
+    }
+
   </div>
 
 

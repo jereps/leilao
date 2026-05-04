@@ -38,7 +38,8 @@ export class LoginComponent {
     this.loginService.login(this.loginForm.value.email,this.loginForm.value.password).subscribe({
       next: () => {
         this.toastrService.success("Login feito com sucesso!");
-        this.router.navigate(["leilao"])
+        this.router.navigate(['']);
+        window.location.replace('leilao');
       },
       error: () => this.toastrService.error("Erro inesperado! Tente novamente")
     })

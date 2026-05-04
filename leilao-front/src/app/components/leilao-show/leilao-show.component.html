@@ -1,0 +1,154 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Dados do Leilão</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="form">
+      <mat-form-field   class="full-width">
+        <mat-label>Nome</mat-label>
+        <input matInput placeholder="Nome" formControlName="nome" />
+      </mat-form-field>
+
+      <mat-form-field    class="full-width">
+        <mat-label>Categoria</mat-label>
+        <mat-select formControlName="categoria" placeholder="Categoria">
+          <mat-option value="IMOVEL">IMOVEL</mat-option>
+          <mat-option value="VEICULO">VEICULO</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field   class="full-width">
+        <mat-label>Descricão</mat-label>
+        <input matInput placeholder="Descricão" formControlName="descricao" />
+      </mat-form-field>
+
+      <mat-form-field   class="full-width">
+        <mat-label>Data</mat-label>
+        <input
+          matInput
+          [matDatepicker]="datepicker"
+          formControlName="dataHorarioLeilao"
+          placeholder="Data"
+        />
+        <mat-datepicker #datepicker />
+        <mat-datepicker-toggle [for]="datepicker" matSuffix />
+      </mat-form-field>
+
+      <mat-form-field    class="full-width">
+        <mat-label>Hora</mat-label>
+        <input
+          matInput
+          [matTimepicker]="timepicker"
+          formControlName="dataHorarioLeilao"
+          placeholder="Hora"
+        />
+        <mat-timepicker #timepicker />
+        <mat-timepicker-toggle [for]="timepicker" matSuffix />
+      </mat-form-field>
+
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>Endereço</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <!-- Grupo aninhado -->
+          <div formGroupName="enderecoLeilaoDTO">
+
+            <mat-form-field    class="form-card">
+              <mat-label>Rua</mat-label>
+              <input matInput placeholder="Rua" formControlName="rua" />
+            </mat-form-field>
+
+            <mat-form-field >
+              <mat-label>Numero</mat-label>
+              <input matInput placeholder="Numero" formControlName="numero" />
+            </mat-form-field>
+
+            <div formGroupName="cep">
+              <mat-form-field   class="form-card2">
+                <mat-label>CEP</mat-label>
+                <input matInput placeholder="CEP" mask="00000-000" formControlName="cep" />
+              </mat-form-field>
+            </div>
+
+            <div formGroupName="bairro">
+              <mat-form-field   class="form-card2">
+                <mat-label>Nome Bairro</mat-label>
+                <input
+                  matInput
+                  placeholder="Nome Bairro"
+                  formControlName="nomeBairro"
+                />
+              </mat-form-field>
+            </div>
+
+            <div formGroupName="cidade">
+              <mat-form-field   class="form-card2">
+                <mat-label>Cidade Nome</mat-label>
+                <input
+                  matInput
+                  placeholder="Cidade Nome"
+                  formControlName="nome"
+                />
+              </mat-form-field>
+            </div>
+
+            <div formGroupName="estado">
+              <mat-form-field   class="form-card">
+                <mat-label>Estado Nome</mat-label>
+                <input
+                  matInput
+                  placeholder="Estado Nome"
+                  formControlName="nome"
+                />
+              </mat-form-field>
+
+              <mat-form-field >
+                <mat-label>Estado Sigla</mat-label>
+                <input
+                  matInput
+                  placeholder="Estado Sigla"
+                  formControlName="sigla"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>Instituição Financeira</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <!-- Grupo aninhado -->
+          <div formGroupName="financeiraDTO">
+            <mat-form-field   class="form-finan">
+              <mat-label>Razão Social</mat-label>
+              <input matInput placeholder="Razão Social" formControlName="razaoSocial" />
+            </mat-form-field>
+
+            <mat-form-field   class="form-finan">
+              <mat-label>Código Compensacão</mat-label>
+              <input matInput placeholder="Código Compensacão" formControlName="codigoCompensacao" />
+            </mat-form-field>
+
+            <mat-form-field   class="form-finan">
+              <mat-label>CNPJ</mat-label>
+              <input matInput mask="00.000.000/0000-00" placeholder="CNPJ" formControlName="cnpj" />
+            </mat-form-field>
+
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+    </form>
+
+  </mat-card-content>
+  <mat-card-actions>
+    <button matButton="elevated" color="primary" (click)="onSubmit()">
+      Voltar
+    </button>
+  </mat-card-actions>
+</mat-card>
+

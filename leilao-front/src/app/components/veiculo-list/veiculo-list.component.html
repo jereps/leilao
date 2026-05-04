@@ -1,4 +1,8 @@
+<app-show-form></app-show-form>
 <mat-card>
+  <mat-card-header>
+    <mat-card-title>Itens</mat-card-title>
+  </mat-card-header>
   <mat-card-content>
     <div class="column-flex mat-elevation-z8">
       <mat-table [dataSource]="itens()">
@@ -49,31 +53,35 @@
 
         <ng-container matColumnDef="actions">
           <mat-header-cell *matHeaderCellDef class="action-column-header">
-            <button matMiniFab color="accent" aria-label="Adicionar um Leilão">
-              <mat-icon (click)="onAdd()">add</mat-icon>
-            </button>
+          @if (loginService.userRoles().includes('ROLE_ADMIN')) {
+              <button matMiniFab color="accent" aria-label="Adicionar um Leilão">
+                <mat-icon (click)="onAdd()">add</mat-icon>
+              </button>
+          }
           </mat-header-cell>
 
           <mat-cell *matCellDef="let iten" class="action-column">
-            <button
-              matIconButton
-              (click)="onEdit(iten)"
-              color="primary"
-              aria-label="Editar Leilão"
-              class="btn btn1"
-            >
-              <mat-icon>edit</mat-icon>
-            </button>
+          @if (loginService.userRoles().includes('ROLE_ADMIN')) {
+              <button
+                matIconButton
+                (click)="onEdit(iten)"
+                color="primary"
+                aria-label="Editar Leilão"
+                class="btn btn1"
+              >
+                <mat-icon>edit</mat-icon>
+              </button>
 
-            <button
-              matIconButton
-              (click)="onDelete(iten)"
-              color="warn"
-              aria-label="Deletar Leilão"
-              class="btn btn2"
-            >
-              <mat-icon>delete</mat-icon>
-            </button>
+              <button
+                matIconButton
+                (click)="onDelete(iten)"
+                color="warn"
+                aria-label="Deletar Leilão"
+                class="btn btn2"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            }
           </mat-cell>
         </ng-container>
 

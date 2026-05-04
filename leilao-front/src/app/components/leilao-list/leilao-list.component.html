@@ -23,17 +23,21 @@
       <!-- descricao Column -->
       <ng-container matColumnDef="descricao">
         <mat-header-cell  *matHeaderCellDef>Descricao</mat-header-cell>
-        <mat-cell  *matCellDef="let leilao">{{ leilao.descricao }}</mat-cell>
+        <mat-cell (click)="clickedRows(leilao)" *matCellDef="let leilao">{{ leilao.descricao }}</mat-cell>
       </ng-container>
+
 
       <ng-container matColumnDef="actions" >
         <mat-header-cell *matHeaderCellDef class="action-column-header">
+        @if (loginService.userRoles().includes('ROLE_ADMIN')) {
           <button matMiniFab color="accent" aria-label="Adicionar um Leilão">
             <mat-icon (click)="onAdd()" >add</mat-icon>
           </button>
+        }
         </mat-header-cell>
 
         <mat-cell *matCellDef="let leilao" class="action-column">
+        @if (loginService.userRoles().includes('ROLE_ADMIN')) {
           <button matIconButton (click)="onEdit(leilao)" color="primary" aria-label="Editar Leilão" class="btn btn1">
             <mat-icon>edit</mat-icon>
           </button>
@@ -41,6 +45,7 @@
           <button matIconButton (click)="onDelete(leilao)" color="warn" aria-label="Deletar Leilão" class="btn btn2">
             <mat-icon>delete</mat-icon>
           </button>
+        }
         </mat-cell>
       </ng-container>
 

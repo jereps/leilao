@@ -1,5 +1,5 @@
 import { Leilao } from './../../model/leilao';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatTableModule } from '@angular/material/table';
 import { DatePipe } from '@angular/common';
@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { LeilaoSubmit } from '../../model/leilao-submit';
+import { LoginService } from '../../services/login.service';
 
 @Component({
   selector: 'app-leilao-list',
@@ -21,6 +22,7 @@ import { LeilaoSubmit } from '../../model/leilao-submit';
   styleUrl: './leilao-list.component.scss',
 })
 export class LeilaoListComponent {
+loginService = inject(LoginService);
 
 
   constructor(

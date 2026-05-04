@@ -9,6 +9,8 @@ import { catchError, of } from 'rxjs';
 import { ImovelService } from '../../services/imovel.service';
 import { ImovelSubmit } from '../../model/imovel-submit';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { LeilaoShowComponent } from "../leilao-show/leilao-show.component";
+import { LoginService } from '../../services/login.service';
 
 @Component({
   selector: 'app-imovel-list',
@@ -17,7 +19,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatIconModule,
     MatCardModule,
     MatButtonModule,
-  ],
+    LeilaoShowComponent
+],
   templateUrl: './imovel-list.component.html',
   styleUrl: './imovel-list.component.scss',
 })
@@ -27,7 +30,8 @@ private route = inject(ActivatedRoute);
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
 
-   id = this.route.snapshot.paramMap.get('id');
+  id = this.route.snapshot.paramMap.get('id');
+  loginService = inject(LoginService);
 
   constructor(){}
     readonly displayedColumns: string[] = [
@@ -78,8 +82,14 @@ private route = inject(ActivatedRoute);
   }
 
   clickedRows(imovel: ImovelSubmit) {
-    // this.iten.emit(leilao);
-    console.log(imovel.id);
+    this.router.navigate(['show', imovel.id],  { state: { imovel }, relativeTo: this.route }).catch((error) =>{
+       this.snackBar.open(
+      `Precisa estar Logado.`,
+      'Done',
+      { duration: 50000 },
+    );
+  });
+
   }
 
   refresh(){

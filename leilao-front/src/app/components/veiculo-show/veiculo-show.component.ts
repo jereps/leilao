@@ -11,12 +11,11 @@ import { MatTimepickerModule } from '@angular/material/timepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ActivatedRoute } from '@angular/router';
-import { NgxMaskDirective } from 'ngx-mask';
 import { VeiculoService } from '../../services/veiculo.service';
 import { VeiculoSubmit } from '../../model/veiculo-submit';
 
 @Component({
-  selector: 'app-veiculo-form',
+  selector: 'app-show-form',
   imports: [
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -30,11 +29,11 @@ import { VeiculoSubmit } from '../../model/veiculo-submit';
 
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './veiculo-form.component.html',
-  styleUrl: './veiculo-form.component.scss',
+  templateUrl: './veiculo-show.component.html',
+  styleUrl: './veiculo-show.component.scss',
   providers: [provideNativeDateAdapter()],
 })
-export class VeiculoFormComponent {
+export class VeiculoShowComponent {
   private route = inject(ActivatedRoute);
   private location = inject(Location);
   private snackBar = inject(MatSnackBar);
@@ -69,18 +68,12 @@ export class VeiculoFormComponent {
 
     });
 
+  constructor(){
+      this.form.disable();
+  }
+
   onSubmit() {
-    console.log("id"+this.id)
-    this.service.save(this.form.getRawValue() as VeiculoSubmit,Number(this.id)).subscribe(
-      (result) =>{
-        let men: string = 'Criado';
-        if(this.form.getRawValue().id){
-          men = 'Atualizado';
-        };
-        this.onSucsess(men)
-      },
-      (error) => this.onError(error),
-    );
+    this.onCancel();
   }
 
   onCancel() {

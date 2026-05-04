@@ -12,6 +12,8 @@ import { JsonPipe } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { VeiculoSubmit } from '../../model/veiculo-submit';
 import { VeiculoService } from '../../services/veiculo.service';
+import { LeilaoShowComponent } from "../leilao-show/leilao-show.component";
+import { LoginService } from '../../services/login.service';
 
 @Component({
   selector: 'app-veiculo-list',
@@ -20,7 +22,8 @@ import { VeiculoService } from '../../services/veiculo.service';
     MatIconModule,
     MatCardModule,
     MatButtonModule,
-  ],
+    LeilaoShowComponent
+],
   templateUrl: './veiculo-list.component.html',
   styleUrl: './veiculo-list.component.scss',
 })
@@ -28,10 +31,12 @@ export class VeiculoListComponent {
 // private router = Inject(Router);
 private route = inject(ActivatedRoute);
   private veiculoService = inject(VeiculoService);
-    private router = inject(Router);
+  private router = inject(Router);
   private snackBar = inject(MatSnackBar);
+  loginService = inject(LoginService);
 
-   id = this.route.snapshot.paramMap.get('id');
+  id = this.route.snapshot.paramMap.get('id');
+
 
   constructor(){}
     readonly displayedColumns: string[] = [
@@ -85,11 +90,16 @@ private route = inject(ActivatedRoute);
   }
 
   clickedRows(veiculo: VeiculoSubmit) {
-    // this.iten.emit(leilao);
-    console.log(veiculo.id);
+    this.router.navigate(['show', veiculo.id],  { state: { veiculo }, relativeTo: this.route }).catch((error) =>{
+       this.snackBar.open(
+      `Precisa estar Logado.`,
+      'Done',
+      { duration: 50000 },
+    );
+  });
   }
 
-    refresh(){
+  refresh(){
     window.location.reload();
   }
 
